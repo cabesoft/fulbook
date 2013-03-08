@@ -1,0 +1,9 @@
+.svn
+.settings
+.project
+.classpath
+target
+test-output
+environment.properties
+comag/comag-service-web/src/main/conf/env/*
+*.orig
