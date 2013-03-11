@@ -1,5 +1,7 @@
 package com.cabesoft.domain.model;
 
+import com.cabesoft.domain.enums.PhysicalStat;
+
 public class PhysicalStatAmount {
 	
 	private PhysicalStat physicalStat;

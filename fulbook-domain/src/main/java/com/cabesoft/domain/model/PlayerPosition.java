@@ -1,5 +1,7 @@
 package com.cabesoft.domain.model;
 
+import com.cabesoft.domain.enums.Position;
+
 public class PlayerPosition {
 
 	private  Boolean active;

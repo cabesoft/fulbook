@@ -2,6 +2,8 @@ package com.cabesoft.domain.model;
 
 import java.util.List;
 
+import com.cabesoft.domain.enums.TeamSlot;
+
 public class TeamItem extends Item{
 	
 	List<TeamStatAmount> teamStats;

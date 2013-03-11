@@ -1,5 +1,7 @@
 package com.cabesoft.domain.model;
 
+import com.cabesoft.domain.enums.TeamStat;
+
 public class TeamStatAmount {
 	private TeamStat teamStat;
 	private Integer amount;

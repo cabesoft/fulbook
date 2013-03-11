@@ -1,4 +1,4 @@
-package com.cabesoft.domain.model;
+package com.cabesoft.domain.enums;
 
 
 public enum PhysicalStat {

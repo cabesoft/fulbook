@@ -2,6 +2,8 @@ package com.cabesoft.domain.model;
 
 import java.util.List;
 
+import com.cabesoft.domain.enums.SocialSlot;
+
 public class SocialItem extends Item{
 	
 	private List<SocialStatAmount> socialStats;

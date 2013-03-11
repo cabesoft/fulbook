@@ -2,6 +2,8 @@ package com.cabesoft.domain.model;
 
 import java.util.List;
 
+import com.cabesoft.domain.enums.PhysicalSlot;
+
 public class PhysicalItem extends Item{
 
 	private List<PhysicalStatAmount> physicalStats;
