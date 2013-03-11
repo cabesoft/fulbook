@@ -1,5 +1,7 @@
 package com.cabesoft.domain.model;
 
+import javax.persistence.*;
+
 public class Item {
 	
 	private Integer id;
@@ -12,14 +14,10 @@ public class Item {
 	
 	private Integer requiredLevel;
 	
-	public Integer getRequiredLevel() {
-		return requiredLevel;
-	}
-
-	public void setRequiredLevel(Integer requiredLevel) {
-		this.requiredLevel = requiredLevel;
-	}
-
+	
+	@Id
+	@GeneratedValue
+	@Column(name="oid")
 	public Integer getId() {
 		return id;
 	}
@@ -27,13 +25,17 @@ public class Item {
 	public Money getPrice() {
 		return price;
 	}
-
+	@Column(name="name")
 	public String getName() {
 		return name;
 	}
-
+	@Column(name="description")
 	public String getDescription() {
 		return description;
+	}
+	@Column(name="required_level")
+	public Integer getRequiredLevel() {
+		return requiredLevel;
 	}
 
 	public void setId(Integer id) {
@@ -53,5 +55,10 @@ public class Item {
 	}
 	
 	
+	
+	
+	public void setRequiredLevel(Integer requiredLevel) {
+		this.requiredLevel = requiredLevel;
+	}
 
 }

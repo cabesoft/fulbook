@@ -1,5 +1,7 @@
 package com.cabesoft.domain.model;
 
+import com.cabesoft.domain.enums.SocialStat;
+
 public class SocialStatAmount {
 	private SocialStat socialAmount;
 	private Integer amount;
