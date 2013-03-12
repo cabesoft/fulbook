@@ -1,9 +1,17 @@
 package com.cabesoft.domain.model;
 
-public class PlayerPhysicalItem  {
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
 
+import com.cabesoft.domain.model.utils.PlayerPhysicalItemPK;
+
+@Entity
+@IdClass(PlayerPhysicalItemPK.class)
+public class PlayerPhysicalItem  {
+	@Id
 	private PhysicalItem physicalItem;
-	
+	@Id
 	private Player player;
 	
 	private Boolean equiped;

@@ -19,10 +19,10 @@ public class App
     	 
     			PlayerDAO dao= (PlayerDAO)appContext.getBean("playerDAO");
     	
-    			/** insert **/
-    	    	Player pl = new Player();
-    	    	pl.setName("jp");
-    	    	dao.save(pl);
+//    			/** insert **/
+//    	    	Player pl = new Player();
+//    	    	pl.setName("jp");
+//    	    	dao.save(pl);
     	     	 
     	    	System.out.println("Done");
     }

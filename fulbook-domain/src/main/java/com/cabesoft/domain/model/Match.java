@@ -1,11 +1,23 @@
 package com.cabesoft.domain.model;
 
-public class Match {
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
 
+import com.cabesoft.domain.model.utils.MatchPK;
+
+@Entity
+@IdClass(MatchPK.class)
+public class Match {
+	@Id
 	private League league;
+	@Id
 	private Team local;
+	@Id	
 	private Team visitor;
+	@Id	
 	private Integer season;
+	@Id	
 	private Integer date;
 	private Integer localGoals;
 	private Integer visitorGoals;

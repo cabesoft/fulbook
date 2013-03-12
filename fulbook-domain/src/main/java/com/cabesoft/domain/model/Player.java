@@ -4,8 +4,12 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.cabesoft.domain.enums.PlayerBehavior;
@@ -26,7 +30,8 @@ public class Player {
     private List<SocialStatAmount> socialStats;
     
     private PlayerBehavior behavior;
-    
+    @JoinColumn(name = "team_id", referencedColumnName = "id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Team team;
     
     private List<PlayerPosition> playerPosition;
@@ -36,7 +41,7 @@ public class Player {
     private Integer level;
  
 	private Money money;
-    
+    @OneToMany
     private List<PlayerPhysicalItem> physicalItems;
     
     private List<PlayerSocialItem> socialItems;  

@@ -1,5 +1,8 @@
 package com.cabesoft.domain.model;
 
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class Money {
 	
 	private Integer tokenMoney;
