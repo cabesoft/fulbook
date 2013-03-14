@@ -25,15 +25,17 @@ public class Player {
     @Column(name="name")
     private String name;
     
-    private List<PhysicalStatAmount> physicalStats;
-    
-    private List<SocialStatAmount> socialStats;
+    @OneToMany
+    private List<PlayerPhysicalStatAmount> physicalStats;
+    @OneToMany
+    private List<PlayerSocialStatAmount> socialStats;
     
     private PlayerBehavior behavior;
     @JoinColumn(name = "team_id", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Team team;
     
+    @OneToMany
     private List<PlayerPosition> playerPosition;
     
     private Integer experience;
@@ -43,7 +45,7 @@ public class Player {
 	private Money money;
     @OneToMany
     private List<PlayerPhysicalItem> physicalItems;
-    
+    @OneToMany
     private List<PlayerSocialItem> socialItems;  
     
     private Integer physicalEnergy;
@@ -68,22 +70,15 @@ public class Player {
 		this.name = name;
 	}
 
-	public List<PhysicalStatAmount> getPhysicalStats() {
+	public List<PlayerPhysicalStatAmount> getPhysicalStats() {
 		return physicalStats;
 	}
 
-	public void setPhysicalStats(List<PhysicalStatAmount> physicalStats) {
+	public void setPhysicalStats(List<PlayerPhysicalStatAmount> physicalStats) {
 		this.physicalStats = physicalStats;
 	}
 
-	public List<SocialStatAmount> getSocialStats() {
-		return socialStats;
-	}
-
-	public void setSocialStats(List<SocialStatAmount> socialStats) {
-		this.socialStats = socialStats;
-	}
-
+	
 	public PlayerBehavior getBehavior() {
 		return behavior;
 	}
@@ -170,5 +165,13 @@ public class Player {
 
 	public void setCompetitiveEnergy(Integer competitiveEnergy) {
 		this.competitiveEnergy = competitiveEnergy;
+	}
+
+	public List<PlayerSocialStatAmount> getSocialStats() {
+		return socialStats;
+	}
+
+	public void setSocialStats(List<PlayerSocialStatAmount> socialStats) {
+		this.socialStats = socialStats;
 	}
 }

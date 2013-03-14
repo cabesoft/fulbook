@@ -11,7 +11,7 @@ import com.cabesoft.domain.enums.PhysicalSlot;
 @Entity
 public class PhysicalItem extends Item{
 	@OneToMany
-	private List<PhysicalStatAmount> physicalStats;
+	private List<ItemPhysicalStatAmount> physicalStats;
 	
 	@Enumerated(EnumType.STRING) 
 	private PhysicalSlot slot;
@@ -24,11 +24,11 @@ public class PhysicalItem extends Item{
 		this.slot = slot;
 	}
 
-	public List<PhysicalStatAmount> getPhysicalStats() {
+	public List<ItemPhysicalStatAmount> getPhysicalStats() {
 		return physicalStats;
 	}
 
-	public void setPhysicalStats(List<PhysicalStatAmount> physicalStats) {
+	public void setPhysicalStats(List<ItemPhysicalStatAmount> physicalStats) {
 		this.physicalStats = physicalStats;
 	}
 	

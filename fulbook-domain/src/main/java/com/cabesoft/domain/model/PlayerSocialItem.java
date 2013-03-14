@@ -1,10 +1,18 @@
 package com.cabesoft.domain.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+
+import com.cabesoft.domain.model.utils.PlayerSocialItemPK;
+
+@Entity
+@IdClass(PlayerSocialItemPK.class)
 public class PlayerSocialItem {
 
-	
+	@Id
 	private SocialItem socialItem;
-	
+	@Id
 	private Player player;
 	
 	private Boolean equiped;
