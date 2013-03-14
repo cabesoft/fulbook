@@ -6,7 +6,7 @@ public class SocialEvent extends PlayerAction {
 
 	private List<SocialItem> itemsRequired;
 	
-	private List<SocialStatAmount>  stats;
+	private List<ItemSocialStatAmount>  stats;
 
 	public List<SocialItem> getItemsRequired() {
 		return itemsRequired;
@@ -16,11 +16,11 @@ public class SocialEvent extends PlayerAction {
 		this.itemsRequired = itemsRequired;
 	}
 
-	public List<SocialStatAmount> getStats() {
+	public List<ItemSocialStatAmount> getStats() {
 		return stats;
 	}
 
-	public void setStats(List<SocialStatAmount> stats) {
+	public void setStats(List<ItemSocialStatAmount> stats) {
 		this.stats = stats;
 	}
 }

@@ -1,14 +1,20 @@
 package com.cabesoft.domain.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+
 import com.cabesoft.domain.enums.Position;
-
+import com.cabesoft.domain.model.utils.PlayerPositionPK;
+@Entity
+@IdClass(PlayerPositionPK.class)
 public class PlayerPosition {
-
-	private  Boolean active;
-	
+	@Id
 	private Player player;
-	
+	@Id
 	private Position position;
+	
+	private  Boolean active;
 	
 	private Integer rankingPoints;
 	
