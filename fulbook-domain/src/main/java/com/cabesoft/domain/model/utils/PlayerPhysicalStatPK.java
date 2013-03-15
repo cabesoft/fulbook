@@ -5,7 +5,7 @@ import java.io.Serializable;
 import javax.persistence.ManyToOne;
 
 
-import com.cabesoft.domain.enums.PhysicalStat;
+import com.cabesoft.domain.model.PhysicalStat;
 import com.cabesoft.domain.model.Player;
 
 public class PlayerPhysicalStatPK implements Serializable{
@@ -13,6 +13,7 @@ public class PlayerPhysicalStatPK implements Serializable{
 	private static final long serialVersionUID = 1L;
 	@ManyToOne
 	private Player player;
+	@ManyToOne
 	private PhysicalStat physicalStat;
 	
 	public PlayerPhysicalStatPK(){

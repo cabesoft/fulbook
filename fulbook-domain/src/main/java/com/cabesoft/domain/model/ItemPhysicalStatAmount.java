@@ -4,7 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 
-import com.cabesoft.domain.enums.PhysicalStat;
 import com.cabesoft.domain.model.utils.ItemPhysicalStatPK;
 
 @Entity

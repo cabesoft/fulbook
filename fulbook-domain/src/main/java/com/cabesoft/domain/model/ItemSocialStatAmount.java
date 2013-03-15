@@ -3,9 +3,7 @@ package com.cabesoft.domain.model;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
-import javax.persistence.JoinColumn;
 
-import com.cabesoft.domain.enums.SocialStat;
 import com.cabesoft.domain.model.utils.ItemSocialStatPK;
 @Entity
 @IdClass(ItemSocialStatPK.class)

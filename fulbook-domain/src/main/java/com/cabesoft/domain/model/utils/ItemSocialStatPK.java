@@ -3,15 +3,15 @@ package com.cabesoft.domain.model.utils;
 import java.io.Serializable;
 
 import javax.persistence.ManyToOne;
-import com.cabesoft.domain.enums.SocialStat;
 import com.cabesoft.domain.model.SocialItem;
+import com.cabesoft.domain.model.SocialStat;
 
 public class ItemSocialStatPK implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	@ManyToOne
 	private SocialItem item;
-	
+	@ManyToOne
 	private SocialStat socialStat;
 	
 	public ItemSocialStatPK(){

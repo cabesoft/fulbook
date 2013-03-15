@@ -5,14 +5,15 @@ import java.io.Serializable;
 import javax.persistence.ManyToOne;
 
 
-import com.cabesoft.domain.enums.SocialStat;
 import com.cabesoft.domain.model.Player;
+import com.cabesoft.domain.model.SocialStat;
 
 public class PlayerSocialStatPK implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	@ManyToOne
 	private Player player;
+	@ManyToOne
 	private SocialStat socialStat;
 	
 	public PlayerSocialStatPK(){
@@ -24,7 +25,7 @@ public class PlayerSocialStatPK implements Serializable{
 	public void setPlayer(Player player) {
 		this.player = player;
 	}
-	public SocialStat getSocialStat() {
+	public com.cabesoft.domain.model.SocialStat getSocialStat() {
 		return socialStat;
 	}
 	public void setSocialStat(SocialStat socialStat) {
