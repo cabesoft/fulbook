@@ -11,21 +11,17 @@ public abstract class Item {
 	
 	private String description;
 	
-	private Money price;
-	
 	private Integer requiredLevel;
 	
 	
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.TABLE)
 	@Column(name="oid")
 	public Integer getId() {
 		return id;
 	}
 
-	public Money getPrice() {
-		return price;
-	}
+
 	@Column(name="name")
 	public String getName() {
 		return name;
@@ -43,10 +39,6 @@ public abstract class Item {
 		this.id = id;
 	}
 
-	public void setPrice(Money price) {
-		this.price = price;
-	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -55,9 +47,7 @@ public abstract class Item {
 		this.description = description;
 	}
 	
-	
-	
-	
+		
 	public void setRequiredLevel(Integer requiredLevel) {
 		this.requiredLevel = requiredLevel;
 	}

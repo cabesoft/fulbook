@@ -1,20 +1,26 @@
 package com.cabesoft.domain.model;
 
-public class PhysicalStat {
-	private Integer id;
-	private Integer name;
+import java.util.Set;
+
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+
+@Entity
+public class PhysicalStat  extends Stat{
+
+	private Set<PhysicalItemStat> stats;
+
+	@OneToMany
+	@JoinColumn(name="stat_id")
+	public Set<PhysicalItemStat> getStats() {
+		return stats;
+	}
+
+	public void setStats(Set<PhysicalItemStat> stats) {
+		this.stats = stats;
+	}
+
 	
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
-	public Integer getName() {
-		return name;
-	}
-	public void setName(Integer name) {
-		this.name = name;
-	}
 
 }

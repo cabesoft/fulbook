@@ -1,21 +1,24 @@
 package com.cabesoft.domain.model;
 
-import java.util.List;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 import com.cabesoft.domain.enums.PhysicalSlot;
 @Entity
 public class PhysicalItem extends Item{
-	@OneToMany
-	private List<ItemPhysicalStatAmount> physicalStats;
-	
-	@Enumerated(EnumType.STRING) 
-	private PhysicalSlot slot;
 
+	
+	private PhysicalSlot slot;
+	private  Set<PhysicalItemStat> stats;
+
+	@Enumerated(EnumType.STRING) 
 	public PhysicalSlot getSlot() {
 		return slot;
 	}
@@ -24,13 +27,16 @@ public class PhysicalItem extends Item{
 		this.slot = slot;
 	}
 
-	public List<ItemPhysicalStatAmount> getPhysicalStats() {
-		return physicalStats;
+	@OneToMany(cascade=CascadeType.ALL)
+	@JoinColumn(name="item_id")
+	public Set<PhysicalItemStat> getStats() {
+		return stats;
 	}
 
-	public void setPhysicalStats(List<ItemPhysicalStatAmount> physicalStats) {
-		this.physicalStats = physicalStats;
+	public void setStats(Set<PhysicalItemStat> stats) {
+		this.stats = stats;
 	}
+
 	
 	
 }
