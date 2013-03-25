@@ -7,6 +7,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
@@ -27,8 +28,8 @@ public class PhysicalItem extends Item{
 		this.slot = slot;
 	}
 
-	@OneToMany(cascade=CascadeType.ALL)
-	@JoinColumn(name="item_id")
+    @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+    @JoinColumn(name="item_id")
 	public Set<PhysicalItemStat> getStats() {
 		return stats;
 	}
