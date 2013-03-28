@@ -7,7 +7,6 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 import com.cabesoft.domain.enums.TeamSlot;
@@ -16,7 +15,7 @@ public class TeamItem extends Item{
 
 	
 	private TeamSlot slot;
-	private  Set<TeamItemStat> stats;
+	private  Set<TeamStatAmount> stats;
 
 
 	@Enumerated(EnumType.STRING) 
@@ -29,12 +28,11 @@ public class TeamItem extends Item{
 	}
 	
    @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-    @JoinColumn(name="item_id")
-	public Set<TeamItemStat> getStats() {
+	public Set<TeamStatAmount> getStats() {
 		return stats;
 	}
 
-	public void setStats(Set<TeamItemStat> stats) {
+	public void setStats(Set<TeamStatAmount> stats) {
 		this.stats = stats;
 	}
 

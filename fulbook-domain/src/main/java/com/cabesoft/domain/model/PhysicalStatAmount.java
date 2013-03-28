@@ -1,40 +1,44 @@
 package com.cabesoft.domain.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
+import javax.persistence.ManyToOne;
 @Entity
 public class PhysicalStatAmount {
-	@Id
-    @GeneratedValue
-	private Integer id;
-	private String name;
+	
+	 private Integer id;
+	 
+	private PhysicalStat stat;
+	
 	private Integer amount;
 	
-	
-
-	public PhysicalStatAmount(String name, Integer amount) {
-		this.name=name;
-		this.amount=amount;
+	@ManyToOne
+	public PhysicalStat getStat() {
+		return stat;
 	}
+	
+	public void setStat(PhysicalStat stat) {
+		this.stat = stat;
+	}
+
+	public Integer getAmount() {
+		return amount;
+	}
+
+	public void setAmount(Integer amount) {
+		this.amount = amount;
+	}
+	@Id
+	@GeneratedValue(strategy = GenerationType.TABLE)
+	@Column(name="oid")
 	public Integer getId() {
 		return id;
 	}
 	public void setId(Integer id) {
 		this.id = id;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public Integer getAmount() {
-		return amount;
-	}
-	public void setAmount(Integer amount) {
-		this.amount = amount;
 	}
 
 }

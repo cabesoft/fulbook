@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 import com.cabesoft.domain.enums.PhysicalSlot;
@@ -17,7 +16,7 @@ public class PhysicalItem extends Item{
 
 	
 	private PhysicalSlot slot;
-	private  Set<PhysicalItemStat> stats;
+	private  Set<PhysicalStatAmount> stats;
 
 	@Enumerated(EnumType.STRING) 
 	public PhysicalSlot getSlot() {
@@ -29,12 +28,11 @@ public class PhysicalItem extends Item{
 	}
 
     @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-    @JoinColumn(name="item_id")
-	public Set<PhysicalItemStat> getStats() {
+	public Set<PhysicalStatAmount> getStats() {
 		return stats;
 	}
 
-	public void setStats(Set<PhysicalItemStat> stats) {
+	public void setStats(Set<PhysicalStatAmount> stats) {
 		this.stats = stats;
 	}
 

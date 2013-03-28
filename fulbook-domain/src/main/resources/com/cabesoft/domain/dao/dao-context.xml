@@ -26,5 +26,9 @@ http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 	<bean id="teamStatDao" class="com.cabesoft.domain.dao.impl.TeamStatDaoImpl">
 		<property name="sessionFactory" ref="sessionFactory"></property>
 	</bean>
+	
+	<bean id="playerDao" class="com.cabesoft.domain.dao.impl.PlayerDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
 
 </beans>

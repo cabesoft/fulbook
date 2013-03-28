@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 import com.cabesoft.domain.enums.SocialSlot;
@@ -17,7 +16,7 @@ public class SocialItem extends Item{
 	
 	
 	private SocialSlot slot;
-	private  Set<SocialItemStat> stats;
+	private  Set<SocialStatAmount> stats;
 
 	@Enumerated(EnumType.STRING) 
 	public SocialSlot getSlot() {
@@ -29,12 +28,11 @@ public class SocialItem extends Item{
 	}
 	
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-    @JoinColumn(name="item_id")
-	public Set<SocialItemStat> getStats() {
+	public Set<SocialStatAmount> getStats() {
 		return stats;
 	}
 
-	public void setStats(Set<SocialItemStat> stats) {
+	public void setStats(Set<SocialStatAmount> stats) {
 		this.stats = stats;
 	}
 
