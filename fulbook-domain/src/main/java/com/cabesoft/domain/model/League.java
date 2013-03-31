@@ -10,12 +10,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 @Entity
 public class League {
 	private Integer id;
 	private String name;
 	private Set<Team> teams;
+	private League parent;
+	private League child;
+	
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE)
@@ -38,5 +42,19 @@ public class League {
 	}
 	public void setTeams(Set<Team> teams) {
 		this.teams = teams;
+	}
+	@OneToOne
+ 	public League getParent() {
+		return parent;
+	}
+	public void setParent(League parent) {
+		this.parent = parent;
+	}
+	@OneToOne	
+	public League getChild() {
+		return child;
+	}
+	public void setChild(League child) {
+		this.child = child;
 	}
 }

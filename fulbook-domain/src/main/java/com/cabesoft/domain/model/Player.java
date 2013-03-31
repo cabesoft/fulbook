@@ -6,6 +6,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.cabesoft.domain.enums.PlayerBehavior;
 import com.cabesoft.domain.utils.Money;
 @Entity
 public class Player {
@@ -21,26 +24,48 @@ public class Player {
 	
 	private String name;
 	
-	private  Set<PhysicalItem> physicalItems;
+	private  Set<PhysicalItemEquiped> physicalItems;
 	
-	private  Set<SocialItem> socialItems;
+	private  Set<SocialItemEquiped> socialItems;
 	
 	private Team team;
 
-	private Integer physical_energy;
+	private Integer physicalEnergy;
 	
-	private Integer competitive_energy;
+	private Integer competitiveEnergy;
 	
-	private Integer social_energy;
+	private Integer socialEnergy;
 	
 	private Integer level;
 	
 	private Integer expirience;
 	
-
+	private PlayerBehavior behavior;
 
 	private Money money;
 	
+	private  Set<SocialStatAmount> socialStatAmounts;
+	
+	private  Set<PhysicalStatAmount> physicalStatAmounts;
+	
+	// puntos en cada  una de las posiciones para ese campeonato
+	
+	private Integer goalKeeperPoints;
+	
+	private Integer defensePoints;
+	
+	private Integer attackPoints;
+	
+	//puntos en el ranking de cada una de las posiciones
+	
+	private Integer goalKeeperRankingPoints;
+	
+	private Integer defenseRankingPoints;
+	
+	private Integer attackRankingPoints;
+	
+
+
 	
 	
 	public String getName() {
@@ -52,20 +77,20 @@ public class Player {
 	}
 	
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	public Set<PhysicalItem> getPhysicalItems() {
+	public Set<PhysicalItemEquiped> getPhysicalItems() {
 		return physicalItems;
 	}
 
-	public void setPhysicalItems(Set<PhysicalItem> physicalItems) {
+	public void setPhysicalItems(Set<PhysicalItemEquiped> physicalItems) {
 		this.physicalItems = physicalItems;
 	}
 	
 	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	public Set<SocialItem> getSocialItems() {
+	public Set<SocialItemEquiped> getSocialItems() {
 		return socialItems;
 	}
 
-	public void setSocialItems(Set<SocialItem> socialItems) {
+	public void setSocialItems(Set<SocialItemEquiped> socialItems) {
 		this.socialItems = socialItems;
 	}
 
@@ -89,29 +114,7 @@ public class Player {
 		this.team = team;
 	}
 
-	public Integer getPhysical_energy() {
-		return physical_energy;
-	}
 
-	public void setPhysical_energy(Integer physical_energy) {
-		this.physical_energy = physical_energy;
-	}
-
-	public Integer getCompetitive_energy() {
-		return competitive_energy;
-	}
-
-	public void setCompetitive_energy(Integer competitive_energy) {
-		this.competitive_energy = competitive_energy;
-	}
-
-	public Integer getSocial_energy() {
-		return social_energy;
-	}
-
-	public void setSocial_energy(Integer social_energy) {
-		this.social_energy = social_energy;
-	}
 
 	public Integer getLevel() {
 		return level;
@@ -137,5 +140,102 @@ public class Player {
 	public void setMoney(Money money) {
 		this.money = money;
 	}
+	@Enumerated(EnumType.STRING)
+	public PlayerBehavior getBehavior() {
+		return behavior;
+	}
+
+	public void setBehavior(PlayerBehavior behavior) {
+		this.behavior = behavior;
+	}
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	public Set<SocialStatAmount> getSocialStatAmounts() {
+		return socialStatAmounts;
+	}
+
+	public void setSocialStatAmounts(Set<SocialStatAmount> socialStatAmounts) {
+		this.socialStatAmounts = socialStatAmounts;
+	}
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	public Set<PhysicalStatAmount> getPhysicalStatAmounts() {
+		return physicalStatAmounts;
+	}
+
+	public void setPhysicalStatAmounts(Set<PhysicalStatAmount> physicalStatAmounts) {
+		this.physicalStatAmounts = physicalStatAmounts;
+	}
+
+	public Integer getPhysicalEnergy() {
+		return physicalEnergy;
+	}
+
+	public void setPhysicalEnergy(Integer physicalEnergy) {
+		this.physicalEnergy = physicalEnergy;
+	}
+
+	public Integer getCompetitiveEnergy() {
+		return competitiveEnergy;
+	}
+
+	public void setCompetitiveEnergy(Integer competitiveEnergy) {
+		this.competitiveEnergy = competitiveEnergy;
+	}
+
+	public Integer getSocialEnergy() {
+		return socialEnergy;
+	}
+
+	public void setSocialEnergy(Integer socialEnergy) {
+		this.socialEnergy = socialEnergy;
+	}
+
+	public Integer getGoalKeeperPoints() {
+		return goalKeeperPoints;
+	}
+
+	public void setGoalKeeperPoints(Integer goalKeeperPoints) {
+		this.goalKeeperPoints = goalKeeperPoints;
+	}
+
+	public Integer getDefensePoints() {
+		return defensePoints;
+	}
+
+	public void setDefensePoints(Integer defensePoints) {
+		this.defensePoints = defensePoints;
+	}
+
+	public Integer getAttackPoints() {
+		return attackPoints;
+	}
+
+	public void setAttackPoints(Integer attackPoints) {
+		this.attackPoints = attackPoints;
+	}
+
+	public Integer getGoalKeeperRankingPoints() {
+		return goalKeeperRankingPoints;
+	}
+
+	public void setGoalKeeperRankingPoints(Integer goalKeeperRankingPoints) {
+		this.goalKeeperRankingPoints = goalKeeperRankingPoints;
+	}
+
+	public Integer getDefenseRankingPoints() {
+		return defenseRankingPoints;
+	}
+
+	public void setDefenseRankingPoints(Integer defenseRankingPoints) {
+		this.defenseRankingPoints = defenseRankingPoints;
+	}
+
+	public Integer getAttackRankingPoints() {
+		return attackRankingPoints;
+	}
+
+	public void setAttackRankingPoints(Integer attackRankingPoints) {
+		this.attackRankingPoints = attackRankingPoints;
+	}
+
 
 }

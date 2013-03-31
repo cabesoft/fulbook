@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import com.cabesoft.domain.utils.Money;
 @Entity
 public class Team {
 	private Integer id;
@@ -20,6 +22,12 @@ public class Team {
 	private League league;
 	
 	private Set<Player> players;
+	
+	private Integer leaguePosition;
+	
+	private Money money;
+	
+	private Set<TeamItemEquiped> teamItems;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE)
@@ -64,6 +72,14 @@ public class Team {
 
 	public void setPlayers(Set<Player> players) {
 		this.players = players;
+	}
+
+	public Integer getLeaguePosition() {
+		return leaguePosition;
+	}
+
+	public void setLeaguePosition(Integer leaguePosition) {
+		this.leaguePosition = leaguePosition;
 	}
 	
 }
