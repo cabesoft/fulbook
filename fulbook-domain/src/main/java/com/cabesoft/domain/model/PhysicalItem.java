@@ -9,9 +9,11 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import com.cabesoft.domain.enums.PhysicalSlot;
 @Entity
+@Table(name="physical_item")
 public class PhysicalItem extends Item{
 
 	

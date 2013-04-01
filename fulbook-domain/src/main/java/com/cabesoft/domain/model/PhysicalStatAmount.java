@@ -6,7 +6,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 @Entity
+@Table(name="physical_stat_amount")
 public class PhysicalStatAmount {
 	
 	 private Integer id;
@@ -15,6 +17,10 @@ public class PhysicalStatAmount {
 	
 	private Integer amount;
 	
+	public PhysicalStatAmount(PhysicalStat physicalStat, Integer amount){
+		this.stat=physicalStat;
+		this.amount=amount;
+	}	
 	@ManyToOne
 	public PhysicalStat getStat() {
 		return stat;

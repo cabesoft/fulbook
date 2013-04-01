@@ -3,6 +3,9 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:schemaLocation="http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
+<!-- Database Configuration -->
+	<import resource="classpath:com/cabesoft/domain/hibernate-context.xml"/>
+	
 	<bean id="physicalItemDao" class="com.cabesoft.domain.dao.impl.PhysicalItemDaoImpl">
 		<property name="sessionFactory" ref="sessionFactory"></property>
 	</bean>
@@ -31,4 +34,15 @@ http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 		<property name="sessionFactory" ref="sessionFactory"></property>
 	</bean>
 
+	<bean id="gameDao" class="com.cabesoft.domain.dao.impl.GameDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<bean id="positionDao" class="com.cabesoft.domain.dao.impl.PositionDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<bean id="teamDao" class="com.cabesoft.domain.dao.impl.TeamDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
 </beans>

@@ -2,11 +2,13 @@ package com.cabesoft.domain.model;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import com.cabesoft.domain.utils.pks.PositionsTablePK;
 
 @Entity
-public class PositionsTable {
+@Table(name="positions_table")
+public class Position {
 	@EmbeddedId 
     private PositionsTablePK primaryKey;
 	

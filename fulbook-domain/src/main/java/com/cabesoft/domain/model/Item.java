@@ -1,6 +1,8 @@
 package com.cabesoft.domain.model;
 
 import javax.persistence.*;
+
+import com.cabesoft.domain.utils.Money;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Item {
@@ -12,6 +14,8 @@ public abstract class Item {
 	private String description;
 	
 	private Integer requiredLevel;
+	
+	private Money price;
 	
 	
 	@Id
@@ -50,6 +54,16 @@ public abstract class Item {
 		
 	public void setRequiredLevel(Integer requiredLevel) {
 		this.requiredLevel = requiredLevel;
+	}
+
+	@Embedded
+	public Money getPrice() {
+		return price;
+	}
+
+
+	public void setPrice(Money price) {
+		this.price = price;
 	}
 
 }

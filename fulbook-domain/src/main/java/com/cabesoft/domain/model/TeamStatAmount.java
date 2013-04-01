@@ -6,7 +6,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 @Entity
+@Table(name="team_stat_amount")
+
 public class TeamStatAmount {
 	
 	private Integer id;
@@ -14,6 +17,11 @@ public class TeamStatAmount {
 	private TeamStat stat;
 	
 	private Integer amount;
+	
+	public TeamStatAmount(TeamStat stat,Integer amount){
+		this.stat=stat;
+		this.amount=amount;
+	}
 	
 	@ManyToOne
 	public TeamStat getStat() {

@@ -4,6 +4,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -80,6 +81,23 @@ public class Team {
 
 	public void setLeaguePosition(Integer leaguePosition) {
 		this.leaguePosition = leaguePosition;
+	}
+	@Embedded
+	public Money getMoney() {
+		return money;
+	}
+
+	public void setMoney(Money money) {
+		this.money = money;
+	}
+	
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	public Set<TeamItemEquiped> getTeamItems() {
+		return teamItems;
+	}
+
+	public void setTeamItems(Set<TeamItemEquiped> teamItems) {
+		this.teamItems = teamItems;
 	}
 	
 }

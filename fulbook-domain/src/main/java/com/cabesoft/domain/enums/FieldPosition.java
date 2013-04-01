@@ -1,5 +1,5 @@
 package com.cabesoft.domain.enums;
 
-public enum Position {
+public enum FieldPosition {
 	GOALKEEPER, DEFENDER, FORWARD
 }
