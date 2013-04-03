@@ -1,5 +1,6 @@
 package com.cabesoft.domain.model;
 
+import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 
@@ -20,12 +21,14 @@ public class Game {
 	public void setGamePK(GamePK gamePK) {
 		this.gamePK = gamePK;
 	}
+	@Column(name = "local_goals", nullable = false)
 	public Integer getLocalGoals() {
 		return localGoals;
 	}
 	public void setLocalGoals(Integer localGoals) {
 		this.localGoals = localGoals;
 	}
+	@Column(name = "visitor_goals", nullable = false)
 	public Integer getVisitorsGoals() {
 		return visitorsGoals;
 	}

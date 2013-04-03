@@ -30,6 +30,7 @@ public class League {
 	public void setId(Integer id) {
 		this.id = id;
 	}
+	@Column(name = "name", nullable = false)
 	public String getName() {
 		return name;
 	}
@@ -50,7 +51,7 @@ public class League {
 	public void setParent(League parent) {
 		this.parent = parent;
 	}
-	@OneToOne	
+	@OneToOne
 	public League getChild() {
 		return child;
 	}

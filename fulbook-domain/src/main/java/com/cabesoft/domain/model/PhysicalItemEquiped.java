@@ -17,6 +17,11 @@ public class PhysicalItemEquiped {
 	private PhysicalItem item;
 	
 	private boolean equiped;
+	
+	public PhysicalItemEquiped(PhysicalItem item,boolean equiped){
+		this.item=item;
+		this.equiped=equiped;
+	}
 	@ManyToOne
 	public PhysicalItem getItem() {
 		return item;

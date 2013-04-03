@@ -4,6 +4,7 @@ package com.cabesoft.domain.model;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -21,6 +22,7 @@ public class PhysicalItem extends Item{
 	private  Set<PhysicalStatAmount> stats;
 
 	@Enumerated(EnumType.STRING) 
+	@Column(name = "physical_slot", nullable = false)
 	public PhysicalSlot getSlot() {
 		return slot;
 	}

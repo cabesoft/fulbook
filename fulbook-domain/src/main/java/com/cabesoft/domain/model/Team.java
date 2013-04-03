@@ -40,7 +40,7 @@ public class Team {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
+	@Column(name="name",nullable=false)
 	public String getName() {
 		return name;
 	}
@@ -48,7 +48,7 @@ public class Team {
 	public void setName(String name) {
 		this.name = name;
 	}
-
+	@Column(name="logo",nullable=false)
 	public String getLogo() {
 		return logo;
 	}
@@ -74,7 +74,7 @@ public class Team {
 	public void setPlayers(Set<Player> players) {
 		this.players = players;
 	}
-
+	@Column(name="league_position")
 	public Integer getLeaguePosition() {
 		return leaguePosition;
 	}

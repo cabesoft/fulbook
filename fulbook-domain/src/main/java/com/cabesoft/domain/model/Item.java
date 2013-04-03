@@ -26,15 +26,15 @@ public abstract class Item {
 	}
 
 
-	@Column(name="name")
+	@Column(name="name", nullable= false)
 	public String getName() {
 		return name;
 	}
-	@Column(name="description")
+	@Column(name="description", nullable= false)
 	public String getDescription() {
 		return description;
 	}
-	@Column(name="required_level")
+	@Column(name="required_level", nullable= false)
 	public Integer getRequiredLevel() {
 		return requiredLevel;
 	}
