@@ -29,6 +29,9 @@ public class Team {
 	private Money money;
 	
 	private Set<TeamItemEquiped> teamItems;
+	
+	private boolean active;
+	
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE)
@@ -98,6 +101,14 @@ public class Team {
 
 	public void setTeamItems(Set<TeamItemEquiped> teamItems) {
 		this.teamItems = teamItems;
+	}
+	@Column(name="active", nullable=false)
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 	
 }
