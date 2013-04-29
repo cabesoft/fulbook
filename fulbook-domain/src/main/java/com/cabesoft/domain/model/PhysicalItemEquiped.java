@@ -9,19 +9,23 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="physical_item_equiped")
+@Table(name = "physical_item_equiped")
 public class PhysicalItemEquiped {
-	
+
 	private Integer id;
-	
+
 	private PhysicalItem item;
-	
+
 	private boolean equiped;
-	
-	public PhysicalItemEquiped(PhysicalItem item,boolean equiped){
-		this.item=item;
-		this.equiped=equiped;
+
+	public PhysicalItemEquiped(PhysicalItem item, boolean equiped) {
+		this.item = item;
+		this.equiped = equiped;
 	}
+
+	public PhysicalItemEquiped() {
+	}
+
 	@ManyToOne
 	public PhysicalItem getItem() {
 		return item;
@@ -38,9 +42,10 @@ public class PhysicalItemEquiped {
 	public void setEquiped(boolean equiped) {
 		this.equiped = equiped;
 	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE)
-	@Column(name="oid")
+	@Column(name = "oid")
 	public Integer getId() {
 		return id;
 	}

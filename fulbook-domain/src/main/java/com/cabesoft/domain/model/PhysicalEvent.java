@@ -6,40 +6,45 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import javax.persistence.OneToMany;
 @Entity
-@Table(name="training")
-public class Training extends Event {
+@Table(name = "phsysical_event")
+public class PhysicalEvent extends Event {
 
 	private Integer expiriencie;
 	private Integer energy;
 	private Set<PhysicalItem> itemsRequired;
-	
+
+	public PhysicalEvent() {
+	}
 
 	@Column(name = "expirience", nullable = false)
 	public Integer getExpiriencie() {
 		return expiriencie;
 	}
+
 	@Column(name = "energy", nullable = false)
 	public Integer getEnergy() {
 		return energy;
 	}
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	public Set<PhysicalItem> getItemsRequired() {
 		return itemsRequired;
 	}
-		public void setExpiriencie(Integer expiriencie) {
+
+	public void setExpiriencie(Integer expiriencie) {
 		this.expiriencie = expiriencie;
 	}
+
 	public void setEnergy(Integer energy) {
 		this.energy = energy;
 	}
+
 	public void setItemsRequired(Set<PhysicalItem> itemsRequired) {
 		this.itemsRequired = itemsRequired;
 	}
-	
-	
-	
+
 }

@@ -1,12 +1,23 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-xsi:schemaLocation="http://www.springframework.org/schema/beans
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
- 
+
 	<!-- Database Configuration -->
-	<import resource="classpath:com/cabesoft/domain/hibernate-context.xml"/>
- 
+	<import resource="classpath:com/cabesoft/domain/hibernate-context.xml" />
+
 	<!-- Beans Declaration -->
-	<import resource="classpath:com/cabesoft/domain/dao/dao-context.xml"/>
- 
+	<import resource="classpath:com/cabesoft/domain/dao/dao-context.xml" />
+
+	<bean id="dozerMapper" class="org.dozer.DozerBeanMapper">
+		<property name="mappingFiles">
+			<list>
+				<value>com/cabesoft/service/dozer-bean-mappings.xml</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="playerService" class="com.cabesoft.service.impl.PlayerServiceImpl">
+		<property name="mapper" ref="dozerMapper"></property>
+		<property name="playerDao" ref="playerDao"></property>
+	</bean>
 </beans>

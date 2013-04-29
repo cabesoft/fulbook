@@ -8,30 +8,37 @@ import com.cabesoft.domain.utils.pks.GamePK;
 
 @Entity
 public class Game {
-	
-    @EmbeddedId
+
+	@EmbeddedId
 	private GamePK gamePK;
-    private Integer localGoals;
-    private Integer visitorsGoals;
-    
-    
+	private Integer localGoals;
+	private Integer visitorsGoals;
+
+	public Game() {
+	}
+
 	public GamePK getGamePK() {
 		return gamePK;
 	}
+
 	public void setGamePK(GamePK gamePK) {
 		this.gamePK = gamePK;
 	}
+
 	@Column(name = "local_goals", nullable = false)
 	public Integer getLocalGoals() {
 		return localGoals;
 	}
+
 	public void setLocalGoals(Integer localGoals) {
 		this.localGoals = localGoals;
 	}
+
 	@Column(name = "visitor_goals", nullable = false)
 	public Integer getVisitorsGoals() {
 		return visitorsGoals;
 	}
+
 	public void setVisitorsGoals(Integer visitorsGoals) {
 		this.visitorsGoals = visitorsGoals;
 	}

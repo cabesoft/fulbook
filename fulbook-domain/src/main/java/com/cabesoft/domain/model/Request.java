@@ -5,6 +5,7 @@ import java.sql.Date;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+
 import com.cabesoft.domain.utils.pks.RequestPK;
 
 /*
@@ -12,24 +13,29 @@ import com.cabesoft.domain.utils.pks.RequestPK;
  * 
  * */
 @Entity
-
 public class Request {
 	@EmbeddedId
-	 private RequestPK requestPK;
-	 private Date date_created;
-	 private boolean team_requested;
-	 
+	private RequestPK requestPK;
+	private Date date_created;
+	private boolean team_requested;
+
+	public Request() {
+	}
+
 	@Column(name = "date_created", nullable = false)
 	public Date getDate_created() {
 		return date_created;
 	}
+
 	public void setDate_created(Date date_created) {
 		this.date_created = date_created;
 	}
+
 	@Column(name = "team_requested", nullable = false)
 	public boolean isTeam_requested() {
 		return team_requested;
 	}
+
 	public void setTeam_requested(boolean team_requested) {
 		this.team_requested = team_requested;
 	}
@@ -41,6 +47,5 @@ public class Request {
 	public void setRequestPK(RequestPK requestPK) {
 		this.requestPK = requestPK;
 	}
-	 
 
 }

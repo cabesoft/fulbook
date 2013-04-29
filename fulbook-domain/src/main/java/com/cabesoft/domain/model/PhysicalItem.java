@@ -1,6 +1,5 @@
 package com.cabesoft.domain.model;
 
-
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -13,15 +12,18 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.cabesoft.domain.enums.PhysicalSlot;
+
 @Entity
-@Table(name="physical_item")
-public class PhysicalItem extends Item{
+@Table(name = "physical_item")
+public class PhysicalItem extends Item {
 
-	
 	private PhysicalSlot slot;
-	private  Set<PhysicalStatAmount> stats;
+	private Set<PhysicalStatAmount> stats;
 
-	@Enumerated(EnumType.STRING) 
+	public PhysicalItem() {
+	}
+
+	@Enumerated(EnumType.STRING)
 	@Column(name = "physical_slot", nullable = false)
 	public PhysicalSlot getSlot() {
 		return slot;
@@ -31,7 +33,7 @@ public class PhysicalItem extends Item{
 		this.slot = slot;
 	}
 
-    @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	public Set<PhysicalStatAmount> getStats() {
 		return stats;
 	}
@@ -40,6 +42,4 @@ public class PhysicalItem extends Item{
 		this.stats = stats;
 	}
 
-	
-	
 }

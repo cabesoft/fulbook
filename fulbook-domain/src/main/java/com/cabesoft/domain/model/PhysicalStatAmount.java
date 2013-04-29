@@ -7,25 +7,30 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
 @Entity
-@Table(name="physical_stat_amount")
+@Table(name = "physical_stat_amount")
 public class PhysicalStatAmount {
-	
-	 private Integer id;
-	 
+
+	private Integer id;
+
 	private PhysicalStat stat;
-	
+
 	private Integer amount;
-	
-	public PhysicalStatAmount(PhysicalStat physicalStat, Integer amount){
-		this.stat=physicalStat;
-		this.amount=amount;
-	}	
+
+	public PhysicalStatAmount(PhysicalStat physicalStat, Integer amount) {
+		this.stat = physicalStat;
+		this.amount = amount;
+	}
+
+	public PhysicalStatAmount() {
+	}
+
 	@ManyToOne
 	public PhysicalStat getStat() {
 		return stat;
 	}
-	
+
 	public void setStat(PhysicalStat stat) {
 		this.stat = stat;
 	}
@@ -37,12 +42,14 @@ public class PhysicalStatAmount {
 	public void setAmount(Integer amount) {
 		this.amount = amount;
 	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE)
-	@Column(name="oid")
+	@Column(name = "oid")
 	public Integer getId() {
 		return id;
 	}
+
 	public void setId(Integer id) {
 		this.id = id;
 	}

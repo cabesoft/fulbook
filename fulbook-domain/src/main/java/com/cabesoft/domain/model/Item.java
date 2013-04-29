@@ -1,40 +1,52 @@
 package com.cabesoft.domain.model;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 
 import com.cabesoft.domain.utils.Money;
+
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Item {
-	
+
 	private Integer id;
-	
+
 	private String name;
-	
+
 	private String description;
-	
+
 	private Integer requiredLevel;
-	
+
 	private Money price;
-	
-	
+
+	public Item() {
+
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE)
-	@Column(name="oid")
+	@Column(name = "oid")
 	public Integer getId() {
 		return id;
 	}
 
-
-	@Column(name="name", nullable= false)
+	@Column(name = "name", nullable = false)
 	public String getName() {
 		return name;
 	}
-	@Column(name="description", nullable= false)
+
+	@Column(name = "description", nullable = false)
 	public String getDescription() {
 		return description;
 	}
-	@Column(name="required_level", nullable= false)
+
+	@Column(name = "required_level", nullable = false)
 	public Integer getRequiredLevel() {
 		return requiredLevel;
 	}
@@ -50,8 +62,7 @@ public abstract class Item {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
-		
+
 	public void setRequiredLevel(Integer requiredLevel) {
 		this.requiredLevel = requiredLevel;
 	}
@@ -60,7 +71,6 @@ public abstract class Item {
 	public Money getPrice() {
 		return price;
 	}
-
 
 	public void setPrice(Money price) {
 		this.price = price;
