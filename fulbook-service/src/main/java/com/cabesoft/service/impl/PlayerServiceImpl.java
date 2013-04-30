@@ -1,6 +1,6 @@
 package com.cabesoft.service.impl;
 
-import java.util.List;
+import java.util.Collection;
 
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Required;
@@ -9,6 +9,7 @@ import com.cabesoft.domain.dao.PlayerDao;
 import com.cabesoft.domain.model.PhysicalStatAmount;
 import com.cabesoft.domain.model.Player;
 import com.cabesoft.domain.model.SocialStatAmount;
+import com.cabesoft.domain.utils.Money;
 import com.cabesoft.model.dto.PhysicalEventDTO;
 import com.cabesoft.model.dto.PhysicalItemDTO;
 import com.cabesoft.model.dto.PhysicalStatDTO;
@@ -27,6 +28,10 @@ public class PlayerServiceImpl implements PlayerService {
 	private static final Integer SOCIAL_ENERGY = 3;
 	private static final Integer COMPETITVE_ENERGY = 3;
 	private static final Integer PHYSICAL_STATS_AMOUNT = 20;
+	private static final Integer SOCIAL_STATS_AMOUNT = 5;
+	private static final Integer FAKE_MONEY = 100;
+	private static final Integer TOKEN_MONEY = 5;
+	
 
 	public PlayerDTO getPlayerByName(String name) {
 		Player player = this.playerDao.getPlayerByName(name);
@@ -34,8 +39,8 @@ public class PlayerServiceImpl implements PlayerService {
 	}
 
 	public boolean createPlayer(String name, String face,
-			List<PhysicalStatAmount> physicalStatAmounts,
-			List<SocialStatAmount> socialStatAmount) {
+			Collection<PhysicalStatAmount> physicalStatAmounts,
+			Collection<SocialStatAmount> socialStatAmount) {
 		if (this.verifyPhysicalStatAmount(physicalStatAmounts)
 				&& this.verifySocialStatAmount(socialStatAmount)
 				&& this.checkNameAvailable(name)) {
@@ -53,6 +58,7 @@ public class PlayerServiceImpl implements PlayerService {
 			player.setPhysicalEnergy(PHYSICAL_ENERGY);
 			player.setSocialEnergy(SOCIAL_ENERGY);
 			player.setCompetitiveEnergy(COMPETITVE_ENERGY);
+			player.setMoney((new Money(FAKE_MONEY, TOKEN_MONEY)));
 			this.playerDao.save(player);
 			return true;
 		} else {
@@ -146,17 +152,17 @@ public class PlayerServiceImpl implements PlayerService {
 	}
 
 	private boolean verifySocialStatAmount(
-			List<SocialStatAmount> socialStatAmounts) {
+			Collection<SocialStatAmount> socialStatAmounts) {
 		// TODO aca se podria verificar que existan todas las caracteristicas
 		Integer acum = 0;
 		for (SocialStatAmount socialStatAmount : socialStatAmounts) {
 			acum = acum + socialStatAmount.getAmount();
 		}
-		return acum == PHYSICAL_STATS_AMOUNT;
+		return acum == SOCIAL_STATS_AMOUNT;
 	}
 
 	private boolean verifyPhysicalStatAmount(
-			List<PhysicalStatAmount> physicalStatAmounts) {
+			Collection<PhysicalStatAmount> physicalStatAmounts) {
 		// TODO aca se podria verificar que existan todas las caracteristicas
 		Integer acum = 0;
 		for (PhysicalStatAmount physicalStatAmount : physicalStatAmounts) {

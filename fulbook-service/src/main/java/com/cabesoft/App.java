@@ -7,14 +7,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.cabesoft.domain.dao.impl.PhysicalStatDaoImpl;
-import com.cabesoft.domain.dao.impl.PlayerDaoImpl;
 import com.cabesoft.domain.dao.impl.SocialStatDaoImpl;
 import com.cabesoft.domain.model.PhysicalStat;
 import com.cabesoft.domain.model.PhysicalStatAmount;
-import com.cabesoft.domain.model.Player;
 import com.cabesoft.domain.model.SocialStat;
 import com.cabesoft.domain.model.SocialStatAmount;
-import com.cabesoft.model.dto.PlayerDTO;
 import com.cabesoft.service.PlayerService;
 
 //import com.cabesoft.domain.dao.PlayerDAO;
@@ -34,7 +31,7 @@ public class App {
 		physicalStatDaoImpl.save(physicalStat);
 
 		PhysicalStatAmount physicalStatAmount = new PhysicalStatAmount(
-				physicalStat, 9);
+				physicalStat, 20);
 		Set<PhysicalStatAmount> physicalItemStats = new HashSet<PhysicalStatAmount>();
 		physicalItemStats.add(physicalStatAmount);
 
@@ -49,19 +46,14 @@ public class App {
 
 		socialStatDaoImpl.save(socialStat);
 
-		SocialStatAmount socialStatAmount = new SocialStatAmount(socialStat, 9);
+		SocialStatAmount socialStatAmount = new SocialStatAmount(socialStat, 5);
 		Set<SocialStatAmount> socialItemStats = new HashSet<SocialStatAmount>();
 		socialItemStats.add(socialStatAmount);
-
-		PlayerDaoImpl playerDaoImpl = (PlayerDaoImpl) appContext
-				.getBean("playerDao");
-		Player player1 = new Player("messi", socialItemStats, physicalItemStats);
-		playerDaoImpl.save(player1);
 
 		PlayerService playerService = (PlayerService) appContext
 				.getBean("playerService");
 
-		PlayerDTO playerDTO = playerService.getPlayerByName("messi");
+		Boolean boolean1= playerService.createPlayer("messi", "1", physicalItemStats, socialItemStats);
 		// PhysicalStatDaoImpl physicalStatDaoImpl=
 		// (PhysicalStatDaoImpl)appContext.getBean("physicalStatDao");
 		//
@@ -95,6 +87,6 @@ public class App {
 		//
 		// creo el jugador y le asingo el item creado
 
-		System.out.println("Done" + playerDTO);
+		System.out.println("Done" );
 	}
 }
