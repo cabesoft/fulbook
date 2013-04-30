@@ -1,6 +1,7 @@
 package com.cabesoft.service.impl;
 
 import java.util.Collection;
+import java.util.Set;
 
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Required;
@@ -10,11 +11,10 @@ import com.cabesoft.domain.model.PhysicalStatAmount;
 import com.cabesoft.domain.model.Player;
 import com.cabesoft.domain.model.SocialStatAmount;
 import com.cabesoft.domain.utils.Money;
-import com.cabesoft.model.dto.PhysicalEventDTO;
 import com.cabesoft.model.dto.PhysicalItemDTO;
+import com.cabesoft.model.dto.PhysicalItemEquipedDTO;
 import com.cabesoft.model.dto.PhysicalStatDTO;
 import com.cabesoft.model.dto.PlayerDTO;
-import com.cabesoft.model.dto.SocialEventDTO;
 import com.cabesoft.model.dto.SocialItemDTO;
 import com.cabesoft.service.PlayerService;
 
@@ -31,14 +31,14 @@ public class PlayerServiceImpl implements PlayerService {
 	private static final Integer SOCIAL_STATS_AMOUNT = 5;
 	private static final Integer FAKE_MONEY = 100;
 	private static final Integer TOKEN_MONEY = 5;
-	
+	private static final int[] expirienceArray={0,50,100,300};
 
 	public PlayerDTO getPlayerByName(String name) {
 		Player player = this.playerDao.getPlayerByName(name);
 		return mapper.map(player, PlayerDTO.class);
 	}
 
-	public boolean createPlayer(String name, String face,
+	public PlayerDTO createPlayer(String name, String face,
 			Collection<PhysicalStatAmount> physicalStatAmounts,
 			Collection<SocialStatAmount> socialStatAmount) {
 		if (this.verifyPhysicalStatAmount(physicalStatAmounts)
@@ -60,9 +60,9 @@ public class PlayerServiceImpl implements PlayerService {
 			player.setCompetitiveEnergy(COMPETITVE_ENERGY);
 			player.setMoney((new Money(FAKE_MONEY, TOKEN_MONEY)));
 			this.playerDao.save(player);
-			return true;
+			return this.mapper.map(player, PlayerDTO.class);
 		} else {
-			return false;
+			return null;
 		}
 
 	}
@@ -72,37 +72,23 @@ public class PlayerServiceImpl implements PlayerService {
 		return player == null;
 	}
 
-	public void addExpirience(PlayerDTO player, Integer amount) {
-		// TODO Auto-generated method stub
-
+	public void addExpirience(PlayerDTO playerDTO, Integer amount) {
+		playerDTO.setExpirience(playerDTO.getExpirience() + amount);
+		int level=1;
+		while(playerDTO.getExpirience()>expirienceArray[level]){
+			level ++;
+		}
+		playerDTO.setLevel(level);
+		Player player=this.mapper.map(playerDTO, Player.class);
+		this.playerDao.update(player);
 	}
 
-	public boolean buyPhysicalItem(PlayerDTO player,
-			PhysicalItemDTO physicalItem) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public boolean buySocialItem(PlayerDTO player, SocialItemDTO socialItem) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public boolean executePhysicalEvent(PlayerDTO player,
-			PhysicalEventDTO physicalEvent) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public boolean executeSocialEvent(PlayerDTO player,
-			SocialEventDTO socialEvent) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 
 	public boolean equipPhysicalItem(PlayerDTO player,
 			PhysicalItemDTO physicalItem) {
-		// TODO Auto-generated method stub
+		Set<PhysicalItemEquipedDTO> physicalItems = player.getPhysicalItems();
+		
+		physicalItems
 		return false;
 	}
 
@@ -123,30 +109,9 @@ public class PlayerServiceImpl implements PlayerService {
 		return false;
 	}
 
-	public PlayerDTO findCompetitiveOponent(PlayerDTO player) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void executeCompetitiveTraining(PlayerDTO challenger,
-			PlayerDTO challenge) {
-		// TODO Auto-generated method stub
-
-	}
-
+	
 	public boolean addPointToPhysicalStat(PlayerDTO challenger,
 			PhysicalStatDTO PhysicalStat) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public boolean sellPhysicalItem(PlayerDTO player,
-			PhysicalItemDTO physicalItem) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public boolean sellSocialItem(PlayerDTO player, SocialItemDTO socialItem) {
 		// TODO Auto-generated method stub
 		return false;
 	}

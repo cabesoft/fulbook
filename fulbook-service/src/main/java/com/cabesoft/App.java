@@ -12,6 +12,7 @@ import com.cabesoft.domain.model.PhysicalStat;
 import com.cabesoft.domain.model.PhysicalStatAmount;
 import com.cabesoft.domain.model.SocialStat;
 import com.cabesoft.domain.model.SocialStatAmount;
+import com.cabesoft.model.dto.PlayerDTO;
 import com.cabesoft.service.PlayerService;
 
 //import com.cabesoft.domain.dao.PlayerDAO;
@@ -53,7 +54,8 @@ public class App {
 		PlayerService playerService = (PlayerService) appContext
 				.getBean("playerService");
 
-		Boolean boolean1= playerService.createPlayer("messi", "1", physicalItemStats, socialItemStats);
+		PlayerDTO messi= playerService.createPlayer("messi", "1", physicalItemStats, socialItemStats);
+		playerService.addExpirience(messi, 30);
 		// PhysicalStatDaoImpl physicalStatDaoImpl=
 		// (PhysicalStatDaoImpl)appContext.getBean("physicalStatDao");
 		//
@@ -87,6 +89,6 @@ public class App {
 		//
 		// creo el jugador y le asingo el item creado
 
-		System.out.println("Done" );
+		System.out.println("Done" + messi);
 	}
 }

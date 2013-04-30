@@ -13,9 +13,7 @@ import javax.persistence.Table;
 public class PhysicalItemEquiped {
 
 	private Integer id;
-
 	private PhysicalItem item;
-
 	private boolean equiped;
 
 	public PhysicalItemEquiped(PhysicalItem item, boolean equiped) {

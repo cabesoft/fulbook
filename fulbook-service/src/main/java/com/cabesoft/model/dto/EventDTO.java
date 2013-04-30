@@ -1,6 +1,6 @@
 package com.cabesoft.model.dto;
 
-public class EventDTO {
+public abstract class EventDTO {
 	private Integer id;
 	private String name;
 	private String description;
