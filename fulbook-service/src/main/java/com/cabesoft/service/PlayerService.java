@@ -11,6 +11,8 @@ import com.cabesoft.model.dto.SocialItemDTO;
 
 public interface PlayerService {
 
+	PlayerDTO getPlayerById(Integer id);
+
 	PlayerDTO getPlayerByName(String name);
 
 	PlayerDTO createPlayer(String name, String face,
@@ -28,7 +30,7 @@ public interface PlayerService {
 	boolean unEquipPhysicalItem(PlayerDTO player, PhysicalItemDTO physicalItem);
 
 	boolean unEquipSocialItem(PlayerDTO player, SocialItemDTO physicalItem);
-	
+
 	boolean addPointToPhysicalStat(PlayerDTO challenger,
 			PhysicalStatDTO PhysicalStat);
 

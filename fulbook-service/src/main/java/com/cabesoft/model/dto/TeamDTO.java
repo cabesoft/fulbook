@@ -2,24 +2,22 @@ package com.cabesoft.model.dto;
 
 import java.util.Set;
 
-import com.cabesoft.domain.model.League;
-
 public class TeamDTO {
-	
+
 	private Integer id;
 	private String name;
 	private String logo;
-	
-	private League league;
-	
+
+	private LeagueDTO league;
+
 	private Set<PlayerDTO> players;
-	
+
 	private Integer leaguePosition;
-	
+
 	private MoneyDTO money;
-	
+
 	private Set<TeamItemEquipedDTO> teamItems;
-	
+
 	private boolean active;
 
 	public Integer getId() {
@@ -34,7 +32,7 @@ public class TeamDTO {
 		return logo;
 	}
 
-	public League getLeague() {
+	public LeagueDTO getLeague() {
 		return league;
 	}
 
@@ -70,7 +68,7 @@ public class TeamDTO {
 		this.logo = logo;
 	}
 
-	public void setLeague(League league) {
+	public void setLeague(LeagueDTO league) {
 		this.league = league;
 	}
 
