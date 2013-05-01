@@ -1,21 +1,11 @@
 package com.cabesoft.domain.model;
 
-public class SocialStat {
-	private Integer id;
-	private Integer name;
-	
-	
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
-	public Integer getName() {
-		return name;
-	}
-	public void setName(Integer name) {
-		this.name = name;
-	}
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="social_stat")
+public class SocialStat extends Stat {
 
 }

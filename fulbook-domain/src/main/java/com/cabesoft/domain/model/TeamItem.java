@@ -1,35 +1,41 @@
 package com.cabesoft.domain.model;
 
-import java.util.List;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 import com.cabesoft.domain.enums.TeamSlot;
 @Entity
+@Table(name="team_item")
 public class TeamItem extends Item{
-	@OneToMany
-	List<TeamStatAmount> teamStats;
+
 	
-	@Enumerated(EnumType.STRING) 
 	private TeamSlot slot;
+	private  Set<TeamStatAmount> stats;
 
-	public List<TeamStatAmount> getTeamStats() {
-		return teamStats;
-	}
 
+	@Enumerated(EnumType.STRING) 
 	public TeamSlot getSlot() {
 		return slot;
 	}
 
-	public void setTeamStats(List<TeamStatAmount> teamStats) {
-		this.teamStats = teamStats;
-	}
-
 	public void setSlot(TeamSlot slot) {
 		this.slot = slot;
+	}
+	
+   @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	public Set<TeamStatAmount> getStats() {
+		return stats;
+	}
+
+	public void setStats(Set<TeamStatAmount> stats) {
+		this.stats = stats;
 	}
 
 }

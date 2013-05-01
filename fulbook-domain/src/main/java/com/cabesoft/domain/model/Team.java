@@ -1,52 +1,49 @@
 package com.cabesoft.domain.model;
 
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
+import com.cabesoft.domain.utils.Money;
 @Entity
-@Table(name="Team")
 public class Team {
+	private Integer id;
+	private String name;
+	private String logo;
+	
+	private League league;
+	
+	private Set<Player> players;
+	
+	private Integer leaguePosition;
+	
+	private Money money;
+	
+	private Set<TeamItemEquiped> teamItems;
+	
+	private boolean active;
+	
+
 	@Id
-    @GeneratedValue
-    private Long id;
-     
-    @Column(name="name")
-    private String name;
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "team",
-            fetch = FetchType.LAZY)
-    private List<Player> players;
-
-    private Money money;
-    
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "team_item_inventary", joinColumns = { @JoinColumn(name = "team_id") }, inverseJoinColumns = { @JoinColumn(name = "team_item_id") })
-    private List<TeamItem> items;
-    
-    @JoinColumn(name = "team_id", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private League league;
-
-	public Long getId() {
+	@GeneratedValue(strategy = GenerationType.TABLE)
+	@Column(name="oid")
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
-
+	@Column(name="name",nullable=false)
 	public String getName() {
 		return name;
 	}
@@ -54,31 +51,16 @@ public class Team {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	public List<Player> getPlayers() {
-		return players;
+	@Column(name="logo",nullable=false)
+	public String getLogo() {
+		return logo;
 	}
 
-	public void setPlayers(List<Player> players) {
-		this.players = players;
+	public void setLogo(String logo) {
+		this.logo = logo;
 	}
 
-	public Money getMoney() {
-		return money;
-	}
-
-	public void setMoney(Money money) {
-		this.money = money;
-	}
-
-	public List<TeamItem> getItems() {
-		return items;
-	}
-
-	public void setItems(List<TeamItem> items) {
-		this.items = items;
-	}
-
+	@ManyToOne
 	public League getLeague() {
 		return league;
 	}
@@ -86,7 +68,47 @@ public class Team {
 	public void setLeague(League league) {
 		this.league = league;
 	}
-    
-    
-    
+	
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="team")
+	public Set<Player> getPlayers() {
+		return players;
+	}
+
+	public void setPlayers(Set<Player> players) {
+		this.players = players;
+	}
+	@Column(name="league_position")
+	public Integer getLeaguePosition() {
+		return leaguePosition;
+	}
+
+	public void setLeaguePosition(Integer leaguePosition) {
+		this.leaguePosition = leaguePosition;
+	}
+	@Embedded
+	public Money getMoney() {
+		return money;
+	}
+
+	public void setMoney(Money money) {
+		this.money = money;
+	}
+	
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
+	public Set<TeamItemEquiped> getTeamItems() {
+		return teamItems;
+	}
+
+	public void setTeamItems(Set<TeamItemEquiped> teamItems) {
+		this.teamItems = teamItems;
+	}
+	@Column(name="active", nullable=false)
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+	
 }

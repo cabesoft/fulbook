@@ -2,10 +2,47 @@
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xsi:schemaLocation="http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
- 
-   <!-- Stock Data Access Object -->
-   <bean id="playerDAO" class="com.cabesoft.domain.dao.impl.PlayerDAOImpl" >
-   		<property name="sessionFactory" ref="sessionFactory"></property>
-   </bean>
- 
+
+<!-- Database Configuration -->
+	<import resource="classpath:com/cabesoft/domain/hibernate-context.xml"/>
+	
+	<bean id="physicalItemDao" class="com.cabesoft.domain.dao.impl.PhysicalItemDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<bean id="socialItemDao" class="com.cabesoft.domain.dao.impl.SocialItemDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<bean id="teamItemDao" class="com.cabesoft.domain.dao.impl.TeamItemDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<bean id="physicalStatDao" class="com.cabesoft.domain.dao.impl.PhysicalStatDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<bean id="socialStatDao" class="com.cabesoft.domain.dao.impl.SocialStatDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<bean id="teamStatDao" class="com.cabesoft.domain.dao.impl.TeamStatDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<bean id="playerDao" class="com.cabesoft.domain.dao.impl.PlayerDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+
+	<bean id="gameDao" class="com.cabesoft.domain.dao.impl.GameDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<bean id="positionDao" class="com.cabesoft.domain.dao.impl.PositionDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	
+	<bean id="teamDao" class="com.cabesoft.domain.dao.impl.TeamDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
 </beans>
