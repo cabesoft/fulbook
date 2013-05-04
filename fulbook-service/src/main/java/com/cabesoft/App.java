@@ -54,8 +54,9 @@ public class App {
 		PlayerService playerService = (PlayerService) appContext
 				.getBean("playerService");
 
-		PlayerDTO messi= playerService.createPlayer("messi", "1", physicalItemStats, socialItemStats);
-		playerService.addExpirience(messi, 30);
+		PlayerDTO messi = playerService.createPlayer("messi", "1",
+				physicalItemStats, socialItemStats);
+
 		// PhysicalStatDaoImpl physicalStatDaoImpl=
 		// (PhysicalStatDaoImpl)appContext.getBean("physicalStatDao");
 		//

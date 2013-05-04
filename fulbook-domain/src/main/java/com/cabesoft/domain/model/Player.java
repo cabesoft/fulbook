@@ -1,5 +1,6 @@
 package com.cabesoft.domain.model;
 
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -13,10 +14,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKeyClass;
 import javax.persistence.OneToMany;
 
 import com.cabesoft.domain.enums.FieldPosition;
+import com.cabesoft.domain.enums.PhysicalSlot;
 import com.cabesoft.domain.enums.PlayerBehavior;
+import com.cabesoft.domain.enums.SocialSlot;
 import com.cabesoft.domain.utils.Money;
 
 @Entity
@@ -26,9 +30,9 @@ public class Player {
 
 	private String name;
 
-	private Set<PhysicalItemEquiped> physicalItems;
+	private Map<PhysicalSlot, PhysicalItem> physicalItems;
 
-	private Set<SocialItemEquiped> socialItems;
+	private Map<SocialSlot, SocialItem> socialItems;
 
 	private Team team;
 
@@ -69,7 +73,8 @@ public class Player {
 
 	private String face;
 
-	public Player(String name, Set<SocialStatAmount> socialStatAmounts,
+	public Player(String name, String face,
+			Set<SocialStatAmount> socialStatAmounts,
 			Set<PhysicalStatAmount> physicalStatAmounts) {
 		this.name = name;
 		this.socialStatAmounts = socialStatAmounts;
@@ -86,6 +91,7 @@ public class Player {
 		this.expirience = 0;
 		this.level = 0;
 		this.money = new Money(100, 10);
+		this.face = face;
 
 	}
 
@@ -99,24 +105,6 @@ public class Player {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	public Set<PhysicalItemEquiped> getPhysicalItems() {
-		return physicalItems;
-	}
-
-	public void setPhysicalItems(Set<PhysicalItemEquiped> physicalItems) {
-		this.physicalItems = physicalItems;
-	}
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	public Set<SocialItemEquiped> getSocialItems() {
-		return socialItems;
-	}
-
-	public void setSocialItems(Set<SocialItemEquiped> socialItems) {
-		this.socialItems = socialItems;
 	}
 
 	@Id
@@ -290,6 +278,26 @@ public class Player {
 
 	public void setFace(String face) {
 		this.face = face;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL)
+	@MapKeyClass(value = PhysicalSlot.class)
+	public Map<PhysicalSlot, PhysicalItem> getPhysicalItems() {
+		return physicalItems;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL)
+	@MapKeyClass(value = SocialSlot.class)
+	public Map<SocialSlot, SocialItem> getSocialItems() {
+		return socialItems;
+	}
+
+	public void setPhysicalItems(Map<PhysicalSlot, PhysicalItem> physicalItems) {
+		this.physicalItems = physicalItems;
+	}
+
+	public void setSocialItems(Map<SocialSlot, SocialItem> socialItems) {
+		this.socialItems = socialItems;
 	}
 
 }

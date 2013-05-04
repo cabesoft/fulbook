@@ -1,7 +1,6 @@
 package com.cabesoft.service.impl;
 
 import java.util.Collection;
-import java.util.Set;
 
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Required;
@@ -12,7 +11,6 @@ import com.cabesoft.domain.model.Player;
 import com.cabesoft.domain.model.SocialStatAmount;
 import com.cabesoft.domain.utils.Money;
 import com.cabesoft.model.dto.PhysicalItemDTO;
-import com.cabesoft.model.dto.PhysicalItemEquipedDTO;
 import com.cabesoft.model.dto.PhysicalStatDTO;
 import com.cabesoft.model.dto.PlayerDTO;
 import com.cabesoft.model.dto.SocialItemDTO;
@@ -31,7 +29,7 @@ public class PlayerServiceImpl implements PlayerService {
 	private static final Integer SOCIAL_STATS_AMOUNT = 5;
 	private static final Integer FAKE_MONEY = 100;
 	private static final Integer TOKEN_MONEY = 5;
-	private static final int[] expirienceArray={0,50,100,300};
+	private static final int[] expirienceArray = { 0, 50, 100, 300 };
 
 	public PlayerDTO getPlayerByName(String name) {
 		Player player = this.playerDao.getPlayerByName(name);
@@ -69,26 +67,23 @@ public class PlayerServiceImpl implements PlayerService {
 
 	public boolean checkNameAvailable(String name) {
 		Player player = this.playerDao.getPlayerByName(name);
-		return player == null;
+		return player != null;
 	}
 
 	public void addExpirience(PlayerDTO playerDTO, Integer amount) {
 		playerDTO.setExpirience(playerDTO.getExpirience() + amount);
-		int level=1;
-		while(playerDTO.getExpirience()>expirienceArray[level]){
-			level ++;
+		int level = 1;
+		while (playerDTO.getExpirience() > expirienceArray[level]) {
+			level++;
 		}
 		playerDTO.setLevel(level);
-		Player player=this.mapper.map(playerDTO, Player.class);
+		Player player = this.mapper.map(playerDTO, Player.class);
 		this.playerDao.update(player);
 	}
 
-
 	public boolean equipPhysicalItem(PlayerDTO player,
 			PhysicalItemDTO physicalItem) {
-		Set<PhysicalItemEquipedDTO> physicalItems = player.getPhysicalItems();
-		
-		physicalItems
+		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -109,11 +104,20 @@ public class PlayerServiceImpl implements PlayerService {
 		return false;
 	}
 
-	
 	public boolean addPointToPhysicalStat(PlayerDTO challenger,
 			PhysicalStatDTO PhysicalStat) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Required
+	public void setMapper(Mapper mapper) {
+		this.mapper = mapper;
+	}
+
+	@Required
+	public void setPlayerDao(PlayerDao playerDao) {
+		this.playerDao = playerDao;
 	}
 
 	private boolean verifySocialStatAmount(
@@ -136,14 +140,8 @@ public class PlayerServiceImpl implements PlayerService {
 		return acum == PHYSICAL_STATS_AMOUNT;
 	}
 
-	@Required
-	public void setMapper(Mapper mapper) {
-		this.mapper = mapper;
+	public PlayerDTO getPlayerById(Integer id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
-
-	@Required
-	public void setPlayerDao(PlayerDao playerDao) {
-		this.playerDao = playerDao;
-	}
-
 }

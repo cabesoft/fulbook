@@ -1,54 +1,57 @@
 package com.cabesoft.model.dto;
 
+import java.util.Map;
 import java.util.Set;
 
 import com.cabesoft.domain.enums.FieldPosition;
+import com.cabesoft.domain.enums.PhysicalSlot;
 import com.cabesoft.domain.enums.PlayerBehavior;
+import com.cabesoft.domain.enums.SocialSlot;
 
 public class PlayerDTO {
-private Integer id;
-	
+	private Integer id;
+
 	private String name;
-	
-	private  Set<PhysicalItemEquipedDTO> physicalItems;
-	
-	private  Set<SocialItemEquipedDTO> socialItems;
-	
+
 	private TeamDTO team;
 
 	private Integer physicalEnergy;
-	
+
+	private Map<PhysicalSlot, PhysicalItemDTO> physicalItems;
+
+	private Map<SocialSlot, SocialItemDTO> socialItems;
+
 	private Integer competitiveEnergy;
-	
+
 	private Integer socialEnergy;
-	
+
 	private Integer level;
-	
+
 	private Integer expirience;
-	
+
 	private PlayerBehavior behavior;
 
 	private MoneyDTO money;
-	
-	private  Set<SocialStatAmountDTO> socialStatAmounts;
-	
-	private  Set<PhysicalStatAmountDTO> physicalStatAmounts;
-	
+
+	private Set<SocialStatAmountDTO> socialStatAmounts;
+
+	private Set<PhysicalStatAmountDTO> physicalStatAmounts;
+
 	private FieldPosition position;
-	// puntos en cada  una de las posiciones para ese campeonato
-	
+	// puntos en cada una de las posiciones para ese campeonato
+
 	private Integer goalKeeperPoints;
-	
+
 	private Integer defensePoints;
-	
+
 	private Integer attackPoints;
-	
-	//puntos en el ranking de cada una de las posiciones
-	
+
+	// puntos en el ranking de cada una de las posiciones
+
 	private Integer goalKeeperRankingPoints;
-	
+
 	private Integer defenseRankingPoints;
-	
+
 	private Integer attackRankingPoints;
 
 	public Integer getId() {
@@ -57,22 +60,6 @@ private Integer id;
 
 	public String getName() {
 		return name;
-	}
-
-	public Set<PhysicalItemEquipedDTO> getPhysicalItems() {
-		return physicalItems;
-	}
-
-	public Set<SocialItemEquipedDTO> getSocialItems() {
-		return socialItems;
-	}
-
-	public TeamDTO getTeam() {
-		return team;
-	}
-
-	public Integer getPhysicalEnergy() {
-		return physicalEnergy;
 	}
 
 	public Integer getCompetitiveEnergy() {
@@ -143,22 +130,6 @@ private Integer id;
 		this.name = name;
 	}
 
-	public void setPhysicalItems(Set<PhysicalItemEquipedDTO> physicalItems) {
-		this.physicalItems = physicalItems;
-	}
-
-	public void setSocialItems(Set<SocialItemEquipedDTO> socialItems) {
-		this.socialItems = socialItems;
-	}
-
-	public void setTeam(TeamDTO team) {
-		this.team = team;
-	}
-
-	public void setPhysicalEnergy(Integer physicalEnergy) {
-		this.physicalEnergy = physicalEnergy;
-	}
-
 	public void setCompetitiveEnergy(Integer competitiveEnergy) {
 		this.competitiveEnergy = competitiveEnergy;
 	}
@@ -218,5 +189,38 @@ private Integer id;
 
 	public void setAttackRankingPoints(Integer attackRankingPoints) {
 		this.attackRankingPoints = attackRankingPoints;
+	}
+
+	public TeamDTO getTeam() {
+		return team;
+	}
+
+	public Integer getPhysicalEnergy() {
+		return physicalEnergy;
+	}
+
+	public Map<PhysicalSlot, PhysicalItemDTO> getPhysicalItems() {
+		return physicalItems;
+	}
+
+	public Map<SocialSlot, SocialItemDTO> getSocialItems() {
+		return socialItems;
+	}
+
+	public void setTeam(TeamDTO team) {
+		this.team = team;
+	}
+
+	public void setPhysicalEnergy(Integer physicalEnergy) {
+		this.physicalEnergy = physicalEnergy;
+	}
+
+	public void setPhysicalItems(
+			Map<PhysicalSlot, PhysicalItemDTO> physicalItems) {
+		this.physicalItems = physicalItems;
+	}
+
+	public void setSocialItems(Map<SocialSlot, SocialItemDTO> socialItems) {
+		this.socialItems = socialItems;
 	}
 }

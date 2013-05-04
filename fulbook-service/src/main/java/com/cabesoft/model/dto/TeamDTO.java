@@ -1,6 +1,9 @@
 package com.cabesoft.model.dto;
 
+import java.util.Map;
 import java.util.Set;
+
+import com.cabesoft.domain.enums.TeamSlot;
 
 public class TeamDTO {
 
@@ -16,9 +19,9 @@ public class TeamDTO {
 
 	private MoneyDTO money;
 
-	private Set<TeamItemEquipedDTO> teamItems;
-
 	private boolean active;
+
+	private Map<TeamSlot, TeamItemDTO> teamItems;
 
 	public Integer getId() {
 		return id;
@@ -46,10 +49,6 @@ public class TeamDTO {
 
 	public MoneyDTO getMoney() {
 		return money;
-	}
-
-	public Set<TeamItemEquipedDTO> getTeamItems() {
-		return teamItems;
 	}
 
 	public boolean isActive() {
@@ -84,12 +83,16 @@ public class TeamDTO {
 		this.money = money;
 	}
 
-	public void setTeamItems(Set<TeamItemEquipedDTO> teamItems) {
-		this.teamItems = teamItems;
-	}
-
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+
+	public Map<TeamSlot, TeamItemDTO> getTeamItems() {
+		return teamItems;
+	}
+
+	public void setTeamItems(Map<TeamSlot, TeamItemDTO> teamItems) {
+		this.teamItems = teamItems;
 	}
 
 }

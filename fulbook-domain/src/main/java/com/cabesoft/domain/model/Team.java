@@ -1,5 +1,6 @@
 package com.cabesoft.domain.model;
 
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -11,31 +12,33 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKeyClass;
 import javax.persistence.OneToMany;
 
+import com.cabesoft.domain.enums.TeamSlot;
 import com.cabesoft.domain.utils.Money;
+
 @Entity
 public class Team {
 	private Integer id;
 	private String name;
 	private String logo;
-	
+
 	private League league;
-	
+
 	private Set<Player> players;
-	
+
 	private Integer leaguePosition;
-	
+
 	private Money money;
-	
-	private Set<TeamItemEquiped> teamItems;
-	
+
+	private Map<TeamSlot, TeamItem> teamItems;
+
 	private boolean active;
-	
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE)
-	@Column(name="oid")
+	@Column(name = "oid")
 	public Integer getId() {
 		return id;
 	}
@@ -43,7 +46,8 @@ public class Team {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-	@Column(name="name",nullable=false)
+
+	@Column(name = "name", nullable = false)
 	public String getName() {
 		return name;
 	}
@@ -51,7 +55,8 @@ public class Team {
 	public void setName(String name) {
 		this.name = name;
 	}
-	@Column(name="logo",nullable=false)
+
+	@Column(name = "logo", nullable = false)
 	public String getLogo() {
 		return logo;
 	}
@@ -68,8 +73,8 @@ public class Team {
 	public void setLeague(League league) {
 		this.league = league;
 	}
-	
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="team")
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "team")
 	public Set<Player> getPlayers() {
 		return players;
 	}
@@ -77,7 +82,8 @@ public class Team {
 	public void setPlayers(Set<Player> players) {
 		this.players = players;
 	}
-	@Column(name="league_position")
+
+	@Column(name = "league_position")
 	public Integer getLeaguePosition() {
 		return leaguePosition;
 	}
@@ -85,6 +91,7 @@ public class Team {
 	public void setLeaguePosition(Integer leaguePosition) {
 		this.leaguePosition = leaguePosition;
 	}
+
 	@Embedded
 	public Money getMoney() {
 		return money;
@@ -93,16 +100,8 @@ public class Team {
 	public void setMoney(Money money) {
 		this.money = money;
 	}
-	
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER)
-	public Set<TeamItemEquiped> getTeamItems() {
-		return teamItems;
-	}
 
-	public void setTeamItems(Set<TeamItemEquiped> teamItems) {
-		this.teamItems = teamItems;
-	}
-	@Column(name="active", nullable=false)
+	@Column(name = "active", nullable = false)
 	public boolean isActive() {
 		return active;
 	}
@@ -110,5 +109,15 @@ public class Team {
 	public void setActive(boolean active) {
 		this.active = active;
 	}
-	
+
+	@OneToMany(cascade = CascadeType.ALL)
+	@MapKeyClass(value = TeamSlot.class)
+	public Map<TeamSlot, TeamItem> getTeamItems() {
+		return teamItems;
+	}
+
+	public void setTeamItems(Map<TeamSlot, TeamItem> teamItems) {
+		this.teamItems = teamItems;
+	}
+
 }

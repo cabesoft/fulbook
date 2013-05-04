@@ -1,12 +1,16 @@
 package com.cabesoft.model.dto;
 
-
 public class PhysicalStatAmountDTO {
 	private Integer id;
 
 	private PhysicalStatDTO stat;
+	private Integer amount;
 
-	
+	public PhysicalStatAmountDTO(PhysicalStatDTO physicalStatDTO, Integer amount) {
+		this.stat = physicalStatDTO;
+		this.amount = amount;
+	}
+
 	public Integer getId() {
 		return id;
 	}
@@ -31,5 +35,4 @@ public class PhysicalStatAmountDTO {
 		this.amount = amount;
 	}
 
-	private Integer amount;
 }
