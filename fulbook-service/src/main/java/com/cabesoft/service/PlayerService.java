@@ -25,13 +25,17 @@ public interface PlayerService {
 
 	boolean equipPhysicalItem(PlayerDTO player, PhysicalItemDTO physicalItem);
 
-	boolean equipSocialItem(PlayerDTO player, SocialItemDTO physicalItem);
+	boolean equipSocialItem(PlayerDTO player, SocialItemDTO socialItem);
 
 	boolean unEquipPhysicalItem(PlayerDTO player, PhysicalItemDTO physicalItem);
 
-	boolean unEquipSocialItem(PlayerDTO player, SocialItemDTO physicalItem);
+	boolean unEquipSocialItem(PlayerDTO player, SocialItemDTO socialItem);
 
-	boolean addPointToPhysicalStat(PlayerDTO challenger,
-			PhysicalStatDTO PhysicalStat);
+	boolean addPointToPhysicalStat(PlayerDTO playerDTO,
+			PhysicalStatDTO PhysicalStat, Integer amount);
 
+	boolean addPointToSocialStat(PlayerDTO playerDTO,
+			PhysicalStatDTO PhysicalStat, Integer amount);
+
+	boolean roomOnInventory(PlayerDTO playerDTO);
 }

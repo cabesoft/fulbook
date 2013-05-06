@@ -17,9 +17,9 @@ public class PlayerDTO {
 
 	private Integer physicalEnergy;
 
-	private Map<PhysicalSlot, PhysicalItemDTO> physicalItems;
+	private Map<PhysicalSlot, PhysicalItemDTO> bodyParts;
 
-	private Map<SocialSlot, SocialItemDTO> socialItems;
+	private Map<SocialSlot, SocialItemDTO> socialParts;
 
 	private Integer competitiveEnergy;
 
@@ -53,6 +53,12 @@ public class PlayerDTO {
 	private Integer defenseRankingPoints;
 
 	private Integer attackRankingPoints;
+
+	private Integer physicalPointsToAsign;
+	private Integer socialPointsToAsign;
+
+	private Set<PhysicalItemDTO> physicalItems;
+	private Set<SocialItemDTO> socialItems;
 
 	public Integer getId() {
 		return id;
@@ -199,14 +205,6 @@ public class PlayerDTO {
 		return physicalEnergy;
 	}
 
-	public Map<PhysicalSlot, PhysicalItemDTO> getPhysicalItems() {
-		return physicalItems;
-	}
-
-	public Map<SocialSlot, SocialItemDTO> getSocialItems() {
-		return socialItems;
-	}
-
 	public void setTeam(TeamDTO team) {
 		this.team = team;
 	}
@@ -215,12 +213,52 @@ public class PlayerDTO {
 		this.physicalEnergy = physicalEnergy;
 	}
 
-	public void setPhysicalItems(
-			Map<PhysicalSlot, PhysicalItemDTO> physicalItems) {
+	public Map<PhysicalSlot, PhysicalItemDTO> getBodyParts() {
+		return bodyParts;
+	}
+
+	public Map<SocialSlot, SocialItemDTO> getSocialParts() {
+		return socialParts;
+	}
+
+	public Set<PhysicalItemDTO> getPhysicalItems() {
+		return physicalItems;
+	}
+
+	public Set<SocialItemDTO> getSocialItems() {
+		return socialItems;
+	}
+
+	public void setBodyParts(Map<PhysicalSlot, PhysicalItemDTO> bodyParts) {
+		this.bodyParts = bodyParts;
+	}
+
+	public void setSocialParts(Map<SocialSlot, SocialItemDTO> socialParts) {
+		this.socialParts = socialParts;
+	}
+
+	public void setPhysicalItems(Set<PhysicalItemDTO> physicalItems) {
 		this.physicalItems = physicalItems;
 	}
 
-	public void setSocialItems(Map<SocialSlot, SocialItemDTO> socialItems) {
+	public void setSocialItems(Set<SocialItemDTO> socialItems) {
 		this.socialItems = socialItems;
 	}
+
+	public Integer getPhysicalPointsToAsign() {
+		return physicalPointsToAsign;
+	}
+
+	public Integer getSocialPointsToAsign() {
+		return socialPointsToAsign;
+	}
+
+	public void setPhysicalPointsToAsign(Integer physicalPointsToAsign) {
+		this.physicalPointsToAsign = physicalPointsToAsign;
+	}
+
+	public void setSocialPointsToAsign(Integer socialPointsToAsign) {
+		this.socialPointsToAsign = socialPointsToAsign;
+	}
+
 }

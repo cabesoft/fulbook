@@ -19,9 +19,6 @@ import com.cabesoft.domain.model.PhysicalStatAmount;
 import com.cabesoft.domain.model.Player;
 import com.cabesoft.domain.model.SocialStat;
 import com.cabesoft.domain.model.SocialStatAmount;
-import com.cabesoft.model.dto.PhysicalItemDTO;
-import com.cabesoft.model.dto.PhysicalStatAmountDTO;
-import com.cabesoft.model.dto.PhysicalStatDTO;
 import com.cabesoft.model.dto.PlayerDTO;
 import com.cabesoft.service.impl.PlayerServiceImpl;
 
@@ -82,10 +79,6 @@ public class PlayerServiceImplTest {
 
 	@Test
 	public void equipPhysicalItemWithNoOtherInThatPosition() {
-		PhysicalItemDTO physicalItemDTO = new PhysicalItemDTO();
-		Set<PhysicalStatAmountDTO> physicalStatAmountDTOs = new HashSet<PhysicalStatAmountDTO>();
-		PhysicalStatDTO physicalStatDTO = new PhysicalStatDTO();
-		physicalStatDTO.setId(1);
 
 	}
 

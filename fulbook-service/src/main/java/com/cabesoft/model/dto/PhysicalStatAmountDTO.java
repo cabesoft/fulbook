@@ -6,6 +6,10 @@ public class PhysicalStatAmountDTO {
 	private PhysicalStatDTO stat;
 	private Integer amount;
 
+	public PhysicalStatAmountDTO() {
+
+	}
+
 	public PhysicalStatAmountDTO(PhysicalStatDTO physicalStatDTO, Integer amount) {
 		this.stat = physicalStatDTO;
 		this.amount = amount;

@@ -13,6 +13,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyClass;
 import javax.persistence.OneToMany;
@@ -30,9 +31,9 @@ public class Player {
 
 	private String name;
 
-	private Map<PhysicalSlot, PhysicalItem> physicalItems;
+	private Map<PhysicalSlot, PhysicalItem> bodyParts;
 
-	private Map<SocialSlot, SocialItem> socialItems;
+	private Map<SocialSlot, SocialItem> socialParts;
 
 	private Team team;
 
@@ -72,6 +73,33 @@ public class Player {
 	private Integer attackRankingPoints;
 
 	private String face;
+
+	private Set<PhysicalItem> physicalItems;
+	private Set<SocialItem> socialItems;
+
+	private Integer physicalPointsToAsign;
+
+	private Integer socialPointsToAsign;
+
+	@OneToMany
+	@JoinTable(name = "player_physical_invetory")
+	public Set<PhysicalItem> getPhysicalItems() {
+		return physicalItems;
+	}
+
+	@OneToMany
+	@JoinTable(name = "player_social_invetory")
+	public Set<SocialItem> getSocialItems() {
+		return socialItems;
+	}
+
+	public void setPhysicalItems(Set<PhysicalItem> physicalItems) {
+		this.physicalItems = physicalItems;
+	}
+
+	public void setSocialItems(Set<SocialItem> socialItems) {
+		this.socialItems = socialItems;
+	}
 
 	public Player(String name, String face,
 			Set<SocialStatAmount> socialStatAmounts,
@@ -282,22 +310,38 @@ public class Player {
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@MapKeyClass(value = PhysicalSlot.class)
-	public Map<PhysicalSlot, PhysicalItem> getPhysicalItems() {
-		return physicalItems;
+	public Map<PhysicalSlot, PhysicalItem> getBodyParts() {
+		return bodyParts;
 	}
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@MapKeyClass(value = SocialSlot.class)
-	public Map<SocialSlot, SocialItem> getSocialItems() {
-		return socialItems;
+	public Map<SocialSlot, SocialItem> getSocialParts() {
+		return socialParts;
 	}
 
-	public void setPhysicalItems(Map<PhysicalSlot, PhysicalItem> physicalItems) {
-		this.physicalItems = physicalItems;
+	public void setBodyParts(Map<PhysicalSlot, PhysicalItem> bodyParts) {
+		this.bodyParts = bodyParts;
 	}
 
-	public void setSocialItems(Map<SocialSlot, SocialItem> socialItems) {
-		this.socialItems = socialItems;
+	public void setSocialParts(Map<SocialSlot, SocialItem> socialParts) {
+		this.socialParts = socialParts;
+	}
+
+	public Integer getPhysicalPointsToAsign() {
+		return physicalPointsToAsign;
+	}
+
+	public Integer getSocialPointsToAsign() {
+		return socialPointsToAsign;
+	}
+
+	public void setPhysicalPointsToAsign(Integer physicalPointsToAsign) {
+		this.physicalPointsToAsign = physicalPointsToAsign;
+	}
+
+	public void setSocialPointsToAsign(Integer socialPointsToAsign) {
+		this.socialPointsToAsign = socialPointsToAsign;
 	}
 
 }

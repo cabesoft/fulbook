@@ -48,7 +48,6 @@ public class TeamDaoImpl extends HibernateDaoSupport implements TeamDao {
 
 	public void deactivateTeam(Integer teamId) {
 		Criteria criteria = this.getSession(false).createCriteria(Team.class);
-		criteria.
-		
+
 	}
 }
