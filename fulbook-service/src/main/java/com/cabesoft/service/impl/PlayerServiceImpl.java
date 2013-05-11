@@ -1,6 +1,8 @@
 package com.cabesoft.service.impl;
 
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.Set;
 
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Required;
@@ -11,9 +13,11 @@ import com.cabesoft.domain.model.Player;
 import com.cabesoft.domain.model.SocialStatAmount;
 import com.cabesoft.domain.utils.Money;
 import com.cabesoft.model.dto.PhysicalItemDTO;
+import com.cabesoft.model.dto.PhysicalStatAmountDTO;
 import com.cabesoft.model.dto.PhysicalStatDTO;
 import com.cabesoft.model.dto.PlayerDTO;
 import com.cabesoft.model.dto.SocialItemDTO;
+import com.cabesoft.model.dto.SocialStatAmountDTO;
 import com.cabesoft.service.PlayerService;
 
 public class PlayerServiceImpl implements PlayerService {
@@ -69,8 +73,7 @@ public class PlayerServiceImpl implements PlayerService {
 	}
 
 	public PlayerDTO getPlayerById(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.mapper.map(this.playerDao.get(id), PlayerDTO.class);
 	}
 
 	public boolean checkNameAvailable(String name) {
@@ -151,8 +154,8 @@ public class PlayerServiceImpl implements PlayerService {
 		boolean succes = false;
 		// verifico si lo tiene equipado y si tiene lugar para pasarlo al
 		// inventario
-		if (playerDTO.getBodyParts().get(physicalItem.getSlot())
-				.equals(physicalItem)
+		if (physicalItem.equals(playerDTO.getBodyParts().get(
+				physicalItem.getSlot()))
 				&& this.roomOnInventory(playerDTO)) {
 			succes = true;
 			playerDTO.getPhysicalItems().add(physicalItem);
@@ -168,8 +171,8 @@ public class PlayerServiceImpl implements PlayerService {
 		boolean succes = false;
 		// verifico si lo tiene equipado y si tiene lugar para pasarlo al
 		// inventario
-		if (playerDTO.getSocialParts().get(socialItem.getSlot())
-				.equals(socialItem)
+		if (socialItem.equals(playerDTO.getSocialParts().get(
+				socialItem.getSlot()))
 				&& this.roomOnInventory(playerDTO)) {
 			succes = true;
 			playerDTO.getSocialItems().add(socialItem);
@@ -182,16 +185,30 @@ public class PlayerServiceImpl implements PlayerService {
 
 	public boolean roomOnInventory(PlayerDTO playerDTO) {
 		return playerDTO.getSocialItems().size()
-				+ playerDTO.getPhysicalItems().size() == INVENTORY_SIZE;
+				+ playerDTO.getPhysicalItems().size() <= INVENTORY_SIZE;
 	}
 
 	public boolean addPointToPhysicalStat(PlayerDTO playerDTO,
-			PhysicalStatDTO PhysicalStat, Integer amount) {
+			PhysicalStatDTO physicalStat, Integer amount) {
 		boolean succes;
 		if (playerDTO.getPhysicalPointsToAsign() <= amount) {
-			succes = true;
-
-			// TODO teerminar esto
+			playerDTO.setPhysicalPointsToAsign(playerDTO
+					.getPhysicalPointsToAsign() - amount);
+			Set<PhysicalStatAmountDTO> physicalStatAmounts = playerDTO
+					.getPhysicalStatAmounts();
+			boolean sumo = false;
+			Iterator<PhysicalStatAmountDTO> iterator = physicalStatAmounts
+					.iterator();
+			while (!sumo && iterator.hasNext()) {
+				PhysicalStatAmountDTO next = iterator.next();
+				if (next.getStat().equals(physicalStat)) {
+					sumo = true;
+					next.setAmount(next.getAmount() + amount);
+				}
+			}
+			// si sumo es que fue exitoso
+			this.playerDao.update(this.mapper.map(playerDTO, Player.class));
+			succes = sumo;
 
 		} else {
 			succes = false;
@@ -200,9 +217,32 @@ public class PlayerServiceImpl implements PlayerService {
 	}
 
 	public boolean addPointToSocialStat(PlayerDTO playerDTO,
-			PhysicalStatDTO PhysicalStat, Integer amount) {
-		// TODO Auto-generated method stub
-		return false;
+			PhysicalStatDTO socialStat, Integer amount) {
+		boolean succes;
+		if (playerDTO.getSocialPointsToAsign() <= amount) {
+			playerDTO.setSocialPointsToAsign(playerDTO.getSocialPointsToAsign()
+					- amount);
+			Set<SocialStatAmountDTO> socialStatAmounts = playerDTO
+					.getSocialStatAmounts();
+			boolean sumo = false;
+			Iterator<SocialStatAmountDTO> iterator = socialStatAmounts
+					.iterator();
+			while (!sumo && iterator.hasNext()) {
+				SocialStatAmountDTO next = iterator.next();
+				if (next.getStat().equals(socialStat)) {
+					sumo = true;
+					next.setAmount(next.getAmount() + amount);
+				}
+			}
+			// si sumo es que fue exitoso
+			this.playerDao.update(this.mapper.map(playerDTO, Player.class));
+			succes = sumo;
+
+		} else {
+			succes = false;
+		}
+		return succes;
+
 	}
 
 	@Required
@@ -216,7 +256,7 @@ public class PlayerServiceImpl implements PlayerService {
 	}
 
 	private Integer calculateLevel(PlayerDTO playerDTO) {
-		return (int) (Math.log(playerDTO.getExpirience()) / Math
+		return (int) (Math.log(playerDTO.getExpirience() + LOGARITHM_BASE) / Math
 				.log(LOGARITHM_BASE));
 	}
 

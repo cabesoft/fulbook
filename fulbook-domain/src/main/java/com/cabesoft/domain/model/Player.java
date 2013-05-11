@@ -1,5 +1,7 @@
 package com.cabesoft.domain.model;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -117,10 +119,15 @@ public class Player {
 		this.socialEnergy = 0;
 		this.physicalEnergy = 0;
 		this.expirience = 0;
-		this.level = 0;
+		this.level = 1;
 		this.money = new Money(100, 10);
 		this.face = face;
-
+		this.physicalPointsToAsign=0;
+		this.socialPointsToAsign=0;
+		this.setPhysicalItems(new HashSet<PhysicalItem>());
+		this.setSocialItems(new HashSet<SocialItem>());
+		this.setBodyParts(new HashMap<PhysicalSlot,PhysicalItem>());
+		this.setSocialParts(new HashMap<SocialSlot,SocialItem>());
 	}
 
 	public Player() {

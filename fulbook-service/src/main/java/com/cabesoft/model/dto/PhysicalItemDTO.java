@@ -8,6 +8,16 @@ public class PhysicalItemDTO  extends ItemDTO{
 	private PhysicalSlot slot;
 	private Set<PhysicalStatAmountDTO> stats;
 	
+	public PhysicalItemDTO(){
+		
+	}
+	
+	public PhysicalItemDTO(PhysicalSlot slot, Set<PhysicalStatAmountDTO> stats){
+		this.slot=slot;
+		this.stats=stats;
+		
+		
+	}
 	public PhysicalSlot getSlot() {
 		return slot;
 	}
