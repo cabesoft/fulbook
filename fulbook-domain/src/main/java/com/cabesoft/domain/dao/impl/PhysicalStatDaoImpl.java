@@ -5,7 +5,7 @@ import java.io.Serializable;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import com.cabesoft.domain.dao.PhysicalStatDao;
-import com.cabesoft.domain.model.PhysicalStat;
+import com.cabesoft.domain.enums.PhysicalStat;
 
 
 public class PhysicalStatDaoImpl extends HibernateDaoSupport implements PhysicalStatDao{

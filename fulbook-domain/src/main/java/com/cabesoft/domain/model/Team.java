@@ -1,5 +1,6 @@
 package com.cabesoft.domain.model;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -32,7 +33,9 @@ public class Team {
 
 	private Money money;
 
-	private Map<TeamSlot, TeamItem> teamItems;
+	private Map<TeamSlot, TeamItem> itemsEquiped;
+
+	private List<TeamItem> teamItems;
 
 	private boolean active;
 
@@ -112,11 +115,20 @@ public class Team {
 
 	@OneToMany(cascade = CascadeType.ALL)
 	@MapKeyClass(value = TeamSlot.class)
-	public Map<TeamSlot, TeamItem> getTeamItems() {
+	public Map<TeamSlot, TeamItem> getItemsEquiped() {
+		return itemsEquiped;
+	}
+
+	public void setItemsEquiped(Map<TeamSlot, TeamItem> itemsEquiped) {
+		this.itemsEquiped = itemsEquiped;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL)
+	public List<TeamItem> getTeamItems() {
 		return teamItems;
 	}
 
-	public void setTeamItems(Map<TeamSlot, TeamItem> teamItems) {
+	public void setTeamItems(List<TeamItem> teamItems) {
 		this.teamItems = teamItems;
 	}
 

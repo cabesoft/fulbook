@@ -1,24 +1,23 @@
 package com.cabesoft.domain.model;
 
-import java.util.Set;
+import java.util.Map;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
+import javax.persistence.MapKeyClass;
 import javax.persistence.Table;
 
 import com.cabesoft.domain.enums.PhysicalSlot;
+import com.cabesoft.domain.enums.PhysicalStat;
 
 @Entity
 @Table(name = "physical_item")
 public class PhysicalItem extends Item {
 
 	private PhysicalSlot slot;
-	private Set<PhysicalStatAmount> stats;
+	private Map<PhysicalStat, Integer> stats;
 
 	public PhysicalItem() {
 	}
@@ -33,12 +32,12 @@ public class PhysicalItem extends Item {
 		this.slot = slot;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	public Set<PhysicalStatAmount> getStats() {
+	@MapKeyClass(value = PhysicalStat.class)
+	public Map<PhysicalStat, Integer> getStats() {
 		return stats;
 	}
 
-	public void setStats(Set<PhysicalStatAmount> stats) {
+	public void setStats(Map<PhysicalStat, Integer> stats) {
 		this.stats = stats;
 	}
 

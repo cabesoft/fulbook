@@ -2,8 +2,8 @@ package com.cabesoft.test.service.impl;
 
 import static org.mockito.Mockito.when;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
@@ -15,19 +15,13 @@ import org.springframework.util.Assert;
 
 import com.cabesoft.domain.dao.impl.PlayerDaoImpl;
 import com.cabesoft.domain.enums.PhysicalSlot;
+import com.cabesoft.domain.enums.PhysicalStat;
 import com.cabesoft.domain.enums.SocialSlot;
-import com.cabesoft.domain.model.PhysicalStat;
-import com.cabesoft.domain.model.PhysicalStatAmount;
+import com.cabesoft.domain.enums.SocialStat;
 import com.cabesoft.domain.model.Player;
-import com.cabesoft.domain.model.SocialStat;
-import com.cabesoft.domain.model.SocialStatAmount;
 import com.cabesoft.model.dto.PhysicalItemDTO;
-import com.cabesoft.model.dto.PhysicalStatAmountDTO;
-import com.cabesoft.model.dto.PhysicalStatDTO;
 import com.cabesoft.model.dto.PlayerDTO;
 import com.cabesoft.model.dto.SocialItemDTO;
-import com.cabesoft.model.dto.SocialStatAmountDTO;
-import com.cabesoft.model.dto.SocialStatDTO;
 import com.cabesoft.service.impl.PlayerServiceImpl;
 
 public class PlayerServiceImplTest {
@@ -100,6 +94,16 @@ public class PlayerServiceImplTest {
 	}
 
 	@Test
+	public void failToEquipPhysicalItemNotEnoughLevel() {
+		PhysicalItemDTO physicalItemDTO = this.createPhysicalItemDTO();
+		physicalItemDTO.setRequiredLevel(10);
+		this.messiDTO.getPhysicalItems().add(physicalItemDTO);
+		Assert.isTrue(!this.playerServiceImpl.equipPhysicalItem(messiDTO,
+				physicalItemDTO));
+
+	}
+
+	@Test
 	public void equipPhysicalItemWithAnotherInThatPosition() {
 		PhysicalItemDTO physicalItemDTO1 = this.createPhysicalItemDTO();
 		PhysicalItemDTO physicalItemDTO2 = this.createPhysicalItemDTO2();
@@ -110,6 +114,16 @@ public class PlayerServiceImplTest {
 				.equals(physicalItemDTO2));
 		Assert.isTrue(messiDTO.getPhysicalItems().iterator().next()
 				.equals(physicalItemDTO1));
+	}
+
+	@Test
+	public void failToEquipSocialItemNotEnoughLevel() {
+		SocialItemDTO socialItemDTO = this.createSocialItemDTO();
+		socialItemDTO.setRequiredLevel(10);
+		this.messiDTO.getSocialItems().add(socialItemDTO);
+		Assert.isTrue(!this.playerServiceImpl.equipSocialItem(messiDTO,
+				socialItemDTO));
+
 	}
 
 	@Test
@@ -186,22 +200,70 @@ public class PlayerServiceImplTest {
 		Assert.isTrue(!succes);
 	}
 
+	@Test
+	public void roomOnInventorySucces() {
+		SocialItemDTO socialItemDTO2 = this.createSocialItemDTO2();
+		this.messiDTO.getSocialItems().add(socialItemDTO2);
+		boolean succes = this.playerServiceImpl.roomOnInventory(messiDTO);
+		Assert.isTrue(succes);
+	}
+
+	@Test
+	public void roomOnInventoryNotSucces() {
+		SocialItemDTO socialItemDTO2 = this.createSocialItemDTO2();
+		this.messiDTO.getSocialItems().add(socialItemDTO2);
+		this.messiDTO.getSocialItems().add(socialItemDTO2);
+		this.messiDTO.getSocialItems().add(socialItemDTO2);
+		this.messiDTO.getSocialItems().add(socialItemDTO2);
+		this.messiDTO.getSocialItems().add(socialItemDTO2);
+
+		boolean succes = this.playerServiceImpl.roomOnInventory(messiDTO);
+		Assert.isTrue(!succes);
+	}
+
+	@Test
+	public void addPointsToSocialFailure() {
+
+		boolean succes = this.playerServiceImpl.addPointToSocialStat(messiDTO,
+				SocialStat.HAPPINESS, 10);
+		Assert.isTrue(!succes);
+	}
+
+	@Test
+	public void addPointsToSocial() {
+		messiDTO.setSocialPointsToAsign(4);
+		boolean succes = this.playerServiceImpl.addPointToSocialStat(messiDTO,
+				SocialStat.HAPPINESS, 3);
+		Assert.isTrue(succes);
+		Assert.isTrue(messiDTO.getSocialPointsToAsign() == 1);
+	}
+
+	@Test
+	public void addPointsToPhysicalFailure() {
+
+		boolean succes = this.playerServiceImpl.addPointToPhysicalStat(
+				messiDTO, PhysicalStat.STRENGTH, 10);
+		Assert.isTrue(!succes);
+	}
+
+	@Test
+	public void addPointsToPhysical() {
+		messiDTO.setPhysicalPointsToAsign(4);
+		boolean succes = this.playerServiceImpl.addPointToPhysicalStat(
+				messiDTO, PhysicalStat.STRENGTH, 3);
+		Assert.isTrue(succes);
+		Assert.isTrue(messiDTO.getPhysicalPointsToAsign() == 1);
+	}
+
 	private Player createMessi() {
-		PhysicalStat physicalStat = new PhysicalStat();
-		physicalStat.setName("destreza");
-		PhysicalStatAmount physicalStatAmount = new PhysicalStatAmount(
-				physicalStat, 20);
-		Set<PhysicalStatAmount> physicalItemStats = new HashSet<PhysicalStatAmount>();
-		physicalItemStats.add(physicalStatAmount);
+
+		Map<PhysicalStat, Integer> physicalItemStats = new HashMap<PhysicalStat, Integer>();
+		physicalItemStats.put(PhysicalStat.STRENGTH, 10);
 
 		// same for social
 
-		SocialStat socialStat = new SocialStat();
-		socialStat.setName("felicidad");
-
-		SocialStatAmount socialStatAmount = new SocialStatAmount(socialStat, 5);
-		Set<SocialStatAmount> socialItemStats = new HashSet<SocialStatAmount>();
-		socialItemStats.add(socialStatAmount);
+		Map<SocialStat, Integer> socialItemStats = new HashMap<SocialStat, Integer>();
+		socialItemStats.put(SocialStat.HAPPINESS, 100);
 
 		return new Player("messi", "1", socialItemStats, physicalItemStats);
 	}
@@ -213,16 +275,8 @@ public class PlayerServiceImplTest {
 				.setDescription("es el item mas pedorro del juego, no se ni por que lo hice");
 		physicalItemDTO.setName("Casco de futbol americano");
 		physicalItemDTO.setSlot(PhysicalSlot.HEAD);
-		PhysicalStatDTO physicalStatDTO = new PhysicalStatDTO();
-		physicalStatDTO.setId(1);
-		physicalStatDTO.setName("Fuerza");
-
-		PhysicalStatAmountDTO physicalStatAmountDTO = new PhysicalStatAmountDTO(
-				physicalStatDTO, 10);
-		Set<PhysicalStatAmountDTO> itemStats = new HashSet<PhysicalStatAmountDTO>();
-		itemStats.add(physicalStatAmountDTO);
-		physicalItemDTO.setStats(itemStats);
-
+		physicalItemDTO.getStats().put(PhysicalStat.STRENGTH, 40);
+		physicalItemDTO.setRequiredLevel(1);
 		return physicalItemDTO;
 	}
 
@@ -232,16 +286,8 @@ public class PlayerServiceImplTest {
 		physicalItemDTO.setDescription("segundo item");
 		physicalItemDTO.setName("vicera re piola");
 		physicalItemDTO.setSlot(PhysicalSlot.HEAD);
-		PhysicalStatDTO physicalStatDTO = new PhysicalStatDTO();
-		physicalStatDTO.setId(2);
-		physicalStatDTO.setName("Destreza");
-
-		PhysicalStatAmountDTO physicalStatAmountDTO = new PhysicalStatAmountDTO(
-				physicalStatDTO, 3);
-		Set<PhysicalStatAmountDTO> itemStats = new HashSet<PhysicalStatAmountDTO>();
-		itemStats.add(physicalStatAmountDTO);
-		physicalItemDTO.setStats(itemStats);
-
+		physicalItemDTO.getStats().put(PhysicalStat.DRIBLING, 10);
+		physicalItemDTO.setRequiredLevel(1);
 		return physicalItemDTO;
 	}
 
@@ -251,34 +297,20 @@ public class PlayerServiceImplTest {
 		socialItemDTO.setDescription("hija del verdu");
 		socialItemDTO.setName("La Yemi");
 		socialItemDTO.setSlot(SocialSlot.GIRLFRIEND);
-		SocialStatDTO socialStatDTO = new SocialStatDTO();
-		socialStatDTO.setId(2);
-		socialStatDTO.setName("felicidad");
-
-		SocialStatAmountDTO socialStatAmountDTO = new SocialStatAmountDTO(
-				socialStatDTO, 3);
-		Set<SocialStatAmountDTO> itemStats = new HashSet<SocialStatAmountDTO>();
-		itemStats.add(socialStatAmountDTO);
-		socialItemDTO.setStats(itemStats);
-
+		socialItemDTO.getStats().put(SocialStat.HAPPINESS, -3);
+		socialItemDTO.setRequiredLevel(1);
 		return socialItemDTO;
 	}
 
 	private SocialItemDTO createSocialItemDTO2() {
 		SocialItemDTO socialItemDTO = new SocialItemDTO();
 		socialItemDTO.setId(2);
-		socialItemDTO.setDescription("hija del carnicero");
-		socialItemDTO.setName("La Yoli");
+		socialItemDTO
+				.setDescription("esta mas buena que comer pollo con la mano");
+		socialItemDTO.setName("Pamela anderson");
 		socialItemDTO.setSlot(SocialSlot.GIRLFRIEND);
-		SocialStatDTO socialStatDTO = new SocialStatDTO();
-		socialStatDTO.setId(2);
-		socialStatDTO.setName("felicidad");
-
-		SocialStatAmountDTO socialStatAmountDTO = new SocialStatAmountDTO(
-				socialStatDTO, 7);
-		Set<SocialStatAmountDTO> itemStats = new HashSet<SocialStatAmountDTO>();
-		itemStats.add(socialStatAmountDTO);
-		socialItemDTO.setStats(itemStats);
+		socialItemDTO.getStats().put(SocialStat.HAPPINESS, 50);
+		socialItemDTO.setRequiredLevel(1);
 
 		return socialItemDTO;
 	}

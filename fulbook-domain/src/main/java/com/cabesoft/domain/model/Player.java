@@ -1,29 +1,32 @@
 package com.cabesoft.domain.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKeyClass;
+import javax.persistence.MapKeyEnumerated;
 import javax.persistence.OneToMany;
 
 import com.cabesoft.domain.enums.FieldPosition;
 import com.cabesoft.domain.enums.PhysicalSlot;
+import com.cabesoft.domain.enums.PhysicalStat;
 import com.cabesoft.domain.enums.PlayerBehavior;
 import com.cabesoft.domain.enums.SocialSlot;
+import com.cabesoft.domain.enums.SocialStat;
 import com.cabesoft.domain.utils.Money;
 
 @Entity
@@ -53,9 +56,9 @@ public class Player {
 
 	private Money money;
 
-	private Set<SocialStatAmount> socialStatAmounts;
+	private Map<SocialStat, Integer> socialStatAmounts;
 
-	private Set<PhysicalStatAmount> physicalStatAmounts;
+	private Map<PhysicalStat, Integer> physicalStatAmounts;
 
 	private FieldPosition position;
 	// puntos en cada una de las posiciones para ese campeonato
@@ -76,8 +79,9 @@ public class Player {
 
 	private String face;
 
-	private Set<PhysicalItem> physicalItems;
-	private Set<SocialItem> socialItems;
+	private List<PhysicalItem> physicalItems;
+
+	private List<SocialItem> socialItems;
 
 	private Integer physicalPointsToAsign;
 
@@ -85,27 +89,27 @@ public class Player {
 
 	@OneToMany
 	@JoinTable(name = "player_physical_invetory")
-	public Set<PhysicalItem> getPhysicalItems() {
+	public List<PhysicalItem> getPhysicalItems() {
 		return physicalItems;
 	}
 
 	@OneToMany
 	@JoinTable(name = "player_social_invetory")
-	public Set<SocialItem> getSocialItems() {
+	public List<SocialItem> getSocialItems() {
 		return socialItems;
 	}
 
-	public void setPhysicalItems(Set<PhysicalItem> physicalItems) {
+	public void setPhysicalItems(List<PhysicalItem> physicalItems) {
 		this.physicalItems = physicalItems;
 	}
 
-	public void setSocialItems(Set<SocialItem> socialItems) {
+	public void setSocialItems(List<SocialItem> socialItems) {
 		this.socialItems = socialItems;
 	}
 
 	public Player(String name, String face,
-			Set<SocialStatAmount> socialStatAmounts,
-			Set<PhysicalStatAmount> physicalStatAmounts) {
+			Map<SocialStat, Integer> socialStatAmounts,
+			Map<PhysicalStat, Integer> physicalStatAmounts) {
 		this.name = name;
 		this.socialStatAmounts = socialStatAmounts;
 		this.physicalStatAmounts = physicalStatAmounts;
@@ -122,12 +126,12 @@ public class Player {
 		this.level = 1;
 		this.money = new Money(100, 10);
 		this.face = face;
-		this.physicalPointsToAsign=0;
-		this.socialPointsToAsign=0;
-		this.setPhysicalItems(new HashSet<PhysicalItem>());
-		this.setSocialItems(new HashSet<SocialItem>());
-		this.setBodyParts(new HashMap<PhysicalSlot,PhysicalItem>());
-		this.setSocialParts(new HashMap<SocialSlot,SocialItem>());
+		this.physicalPointsToAsign = 0;
+		this.socialPointsToAsign = 0;
+		this.setPhysicalItems(new ArrayList<PhysicalItem>());
+		this.setSocialItems(new ArrayList<SocialItem>());
+		this.setBodyParts(new HashMap<PhysicalSlot, PhysicalItem>());
+		this.setSocialParts(new HashMap<SocialSlot, SocialItem>());
 	}
 
 	public Player() {
@@ -196,25 +200,6 @@ public class Player {
 
 	public void setBehavior(PlayerBehavior behavior) {
 		this.behavior = behavior;
-	}
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	public Set<SocialStatAmount> getSocialStatAmounts() {
-		return socialStatAmounts;
-	}
-
-	public void setSocialStatAmounts(Set<SocialStatAmount> socialStatAmounts) {
-		this.socialStatAmounts = socialStatAmounts;
-	}
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	public Set<PhysicalStatAmount> getPhysicalStatAmounts() {
-		return physicalStatAmounts;
-	}
-
-	public void setPhysicalStatAmounts(
-			Set<PhysicalStatAmount> physicalStatAmounts) {
-		this.physicalStatAmounts = physicalStatAmounts;
 	}
 
 	@Column(name = "physical_energy", nullable = false)
@@ -349,6 +334,26 @@ public class Player {
 
 	public void setSocialPointsToAsign(Integer socialPointsToAsign) {
 		this.socialPointsToAsign = socialPointsToAsign;
+	}
+
+	@MapKeyClass(value = SocialStat.class)
+	public Map<SocialStat, Integer> getSocialStatAmounts() {
+		return socialStatAmounts;
+	}
+
+	@ElementCollection
+	@MapKeyEnumerated(EnumType.STRING)
+	public Map<PhysicalStat, Integer> getPhysicalStatAmounts() {
+		return physicalStatAmounts;
+	}
+
+	public void setSocialStatAmounts(Map<SocialStat, Integer> socialStatAmounts) {
+		this.socialStatAmounts = socialStatAmounts;
+	}
+
+	public void setPhysicalStatAmounts(
+			Map<PhysicalStat, Integer> physicalStatAmounts) {
+		this.physicalStatAmounts = physicalStatAmounts;
 	}
 
 }

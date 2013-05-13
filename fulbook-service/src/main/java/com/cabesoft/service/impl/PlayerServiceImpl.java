@@ -1,23 +1,19 @@
 package com.cabesoft.service.impl;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.cabesoft.domain.dao.PlayerDao;
-import com.cabesoft.domain.model.PhysicalStatAmount;
+import com.cabesoft.domain.enums.PhysicalStat;
+import com.cabesoft.domain.enums.SocialStat;
 import com.cabesoft.domain.model.Player;
-import com.cabesoft.domain.model.SocialStatAmount;
 import com.cabesoft.domain.utils.Money;
 import com.cabesoft.model.dto.PhysicalItemDTO;
-import com.cabesoft.model.dto.PhysicalStatAmountDTO;
-import com.cabesoft.model.dto.PhysicalStatDTO;
 import com.cabesoft.model.dto.PlayerDTO;
 import com.cabesoft.model.dto.SocialItemDTO;
-import com.cabesoft.model.dto.SocialStatAmountDTO;
 import com.cabesoft.service.PlayerService;
 
 public class PlayerServiceImpl implements PlayerService {
@@ -44,8 +40,8 @@ public class PlayerServiceImpl implements PlayerService {
 	}
 
 	public PlayerDTO createPlayer(String name, String face,
-			Collection<PhysicalStatAmount> physicalStatAmounts,
-			Collection<SocialStatAmount> socialStatAmount) {
+			Map<PhysicalStat, Integer> physicalStatAmounts,
+			Map<SocialStat, Integer> socialStatAmount) {
 		if (this.verifyPhysicalStatAmount(physicalStatAmounts)
 				&& this.verifySocialStatAmount(socialStatAmount)
 				&& this.checkNameAvailable(name)) {
@@ -105,7 +101,9 @@ public class PlayerServiceImpl implements PlayerService {
 	public boolean equipPhysicalItem(PlayerDTO playerDTO,
 			PhysicalItemDTO physicalItem) {
 		boolean succes;
-		if (playerDTO.getPhysicalItems().contains(physicalItem)) {
+		// verifico que lo tenga en el inventario y que le de el nivel
+		if (playerDTO.getPhysicalItems().contains(physicalItem)
+				&& playerDTO.getLevel() >= physicalItem.getRequiredLevel()) {
 			// verifico si tiene un item en la posicion
 			if (playerDTO.getBodyParts().get(physicalItem.getSlot()) != null) {
 				PhysicalItemDTO bodyItem = playerDTO.getBodyParts().get(
@@ -128,7 +126,9 @@ public class PlayerServiceImpl implements PlayerService {
 
 	public boolean equipSocialItem(PlayerDTO playerDTO, SocialItemDTO socialItem) {
 		boolean succes;
-		if (playerDTO.getSocialItems().contains(socialItem)) {
+		// verifico que lo tenga en el inventario y que le de el nivel
+		if (playerDTO.getSocialItems().contains(socialItem)
+				&& playerDTO.getLevel() >= socialItem.getRequiredLevel()) {
 			// verifico si tiene un item en la posicion
 			if (playerDTO.getSocialParts().get(socialItem.getSlot()) != null) {
 				SocialItemDTO bodyItem = playerDTO.getSocialParts().get(
@@ -185,30 +185,23 @@ public class PlayerServiceImpl implements PlayerService {
 
 	public boolean roomOnInventory(PlayerDTO playerDTO) {
 		return playerDTO.getSocialItems().size()
-				+ playerDTO.getPhysicalItems().size() <= INVENTORY_SIZE;
+				+ playerDTO.getPhysicalItems().size() < INVENTORY_SIZE;
 	}
 
 	public boolean addPointToPhysicalStat(PlayerDTO playerDTO,
-			PhysicalStatDTO physicalStat, Integer amount) {
+			PhysicalStat physicalStat, Integer amount) {
 		boolean succes;
-		if (playerDTO.getPhysicalPointsToAsign() <= amount) {
+		if (amount < playerDTO.getPhysicalPointsToAsign()) {
+			succes = true;
+			Integer previus = playerDTO.getPhysicalStatAmounts().get(
+					physicalStat);
+			if (previus == null) {
+				previus = 0;
+			}
+			playerDTO.getPhysicalStatAmounts().put(physicalStat,
+					previus + amount);
 			playerDTO.setPhysicalPointsToAsign(playerDTO
 					.getPhysicalPointsToAsign() - amount);
-			Set<PhysicalStatAmountDTO> physicalStatAmounts = playerDTO
-					.getPhysicalStatAmounts();
-			boolean sumo = false;
-			Iterator<PhysicalStatAmountDTO> iterator = physicalStatAmounts
-					.iterator();
-			while (!sumo && iterator.hasNext()) {
-				PhysicalStatAmountDTO next = iterator.next();
-				if (next.getStat().equals(physicalStat)) {
-					sumo = true;
-					next.setAmount(next.getAmount() + amount);
-				}
-			}
-			// si sumo es que fue exitoso
-			this.playerDao.update(this.mapper.map(playerDTO, Player.class));
-			succes = sumo;
 
 		} else {
 			succes = false;
@@ -217,32 +210,21 @@ public class PlayerServiceImpl implements PlayerService {
 	}
 
 	public boolean addPointToSocialStat(PlayerDTO playerDTO,
-			PhysicalStatDTO socialStat, Integer amount) {
+			SocialStat socialStat, Integer amount) {
 		boolean succes;
-		if (playerDTO.getSocialPointsToAsign() <= amount) {
+		if (amount < playerDTO.getSocialPointsToAsign()) {
+			succes = true;
+			Integer previus = playerDTO.getSocialStatAmounts().get(socialStat);
+			if (previus == null) {
+				previus = 0;
+			}
+			playerDTO.getSocialStatAmounts().put(socialStat, previus + amount);
 			playerDTO.setSocialPointsToAsign(playerDTO.getSocialPointsToAsign()
 					- amount);
-			Set<SocialStatAmountDTO> socialStatAmounts = playerDTO
-					.getSocialStatAmounts();
-			boolean sumo = false;
-			Iterator<SocialStatAmountDTO> iterator = socialStatAmounts
-					.iterator();
-			while (!sumo && iterator.hasNext()) {
-				SocialStatAmountDTO next = iterator.next();
-				if (next.getStat().equals(socialStat)) {
-					sumo = true;
-					next.setAmount(next.getAmount() + amount);
-				}
-			}
-			// si sumo es que fue exitoso
-			this.playerDao.update(this.mapper.map(playerDTO, Player.class));
-			succes = sumo;
-
 		} else {
 			succes = false;
 		}
 		return succes;
-
 	}
 
 	@Required
@@ -260,22 +242,24 @@ public class PlayerServiceImpl implements PlayerService {
 				.log(LOGARITHM_BASE));
 	}
 
-	private boolean verifySocialStatAmount(
-			Collection<SocialStatAmount> socialStatAmounts) {
-		Integer acum = 0;
-		for (SocialStatAmount socialStatAmount : socialStatAmounts) {
-			acum = acum + socialStatAmount.getAmount();
+	private boolean verifyPhysicalStatAmount(
+			Map<PhysicalStat, Integer> physicalStatAmounts) {
+
+		Integer amount = 0;
+		for (Entry<PhysicalStat, Integer> entry : physicalStatAmounts
+				.entrySet()) {
+			amount = amount + entry.getValue();
 		}
-		return acum == SOCIAL_STATS_AMOUNT;
+		return amount == PHYSICAL_STATS_AMOUNT;
 	}
 
-	private boolean verifyPhysicalStatAmount(
-			Collection<PhysicalStatAmount> physicalStatAmounts) {
-		Integer acum = 0;
-		for (PhysicalStatAmount physicalStatAmount : physicalStatAmounts) {
-			acum = acum + physicalStatAmount.getAmount();
+	private boolean verifySocialStatAmount(
+			Map<SocialStat, Integer> socialStatAmount) {
+		Integer amount = 0;
+		for (Entry<SocialStat, Integer> entry : socialStatAmount.entrySet()) {
+			amount = amount + entry.getValue();
 		}
-		return acum == PHYSICAL_STATS_AMOUNT;
+		return amount == SOCIAL_STATS_AMOUNT;
 	}
 
 }
