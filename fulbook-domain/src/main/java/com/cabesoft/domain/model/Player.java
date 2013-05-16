@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -17,9 +16,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapKey;
 import javax.persistence.MapKeyClass;
 import javax.persistence.MapKeyEnumerated;
 import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.CollectionOfElements;
 
 import com.cabesoft.domain.enums.FieldPosition;
 import com.cabesoft.domain.enums.PhysicalSlot;
@@ -301,7 +303,7 @@ public class Player {
 	}
 
 	@OneToMany(cascade = CascadeType.ALL)
-	@MapKeyClass(value = PhysicalSlot.class)
+	@MapKey(name = "slot")
 	public Map<PhysicalSlot, PhysicalItem> getBodyParts() {
 		return bodyParts;
 	}
@@ -336,12 +338,13 @@ public class Player {
 		this.socialPointsToAsign = socialPointsToAsign;
 	}
 
-	@MapKeyClass(value = SocialStat.class)
+	@CollectionOfElements
+	@MapKeyEnumerated(EnumType.STRING)
 	public Map<SocialStat, Integer> getSocialStatAmounts() {
 		return socialStatAmounts;
 	}
 
-	@ElementCollection
+	@CollectionOfElements
 	@MapKeyEnumerated(EnumType.STRING)
 	public Map<PhysicalStat, Integer> getPhysicalStatAmounts() {
 		return physicalStatAmounts;

@@ -6,8 +6,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.MapKeyClass;
+import javax.persistence.MapKeyEnumerated;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.CollectionOfElements;
 
 import com.cabesoft.domain.enums.PhysicalSlot;
 import com.cabesoft.domain.enums.PhysicalStat;
@@ -32,7 +34,8 @@ public class PhysicalItem extends Item {
 		this.slot = slot;
 	}
 
-	@MapKeyClass(value = PhysicalStat.class)
+	@CollectionOfElements
+	@MapKeyEnumerated(EnumType.STRING)
 	public Map<PhysicalStat, Integer> getStats() {
 		return stats;
 	}

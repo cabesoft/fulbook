@@ -5,10 +5,13 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.FetchType;
-import javax.persistence.MapKeyClass;
+import javax.persistence.MapKeyEnumerated;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.CollectionOfElements;
 
 import com.cabesoft.domain.enums.SocialStat;
 
@@ -28,7 +31,8 @@ public class SocialEvent extends Event {
 		this.itemsRequired = itemsRequired;
 	}
 
-	@MapKeyClass(value = SocialStat.class)
+	@CollectionOfElements
+	@MapKeyEnumerated(EnumType.STRING)
 	public Map<SocialStat, Integer> getSocialStats() {
 		return socialStats;
 	}

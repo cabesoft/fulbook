@@ -37,4 +37,6 @@ public interface PlayerService {
 			Integer amount);
 
 	boolean roomOnInventory(PlayerDTO playerDTO);
+
+	boolean update(PlayerDTO playerDTO);
 }

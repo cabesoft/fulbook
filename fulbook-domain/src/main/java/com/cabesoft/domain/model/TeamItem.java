@@ -5,8 +5,10 @@ import java.util.Map;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.MapKeyClass;
+import javax.persistence.MapKeyEnumerated;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.CollectionOfElements;
 
 import com.cabesoft.domain.enums.TeamSlot;
 import com.cabesoft.domain.enums.TeamStat;
@@ -27,7 +29,8 @@ public class TeamItem extends Item {
 		this.slot = slot;
 	}
 
-	@MapKeyClass(value = TeamStat.class)
+	@CollectionOfElements
+	@MapKeyEnumerated(EnumType.STRING)
 	public Map<TeamStat, Integer> getStats() {
 		return stats;
 	}

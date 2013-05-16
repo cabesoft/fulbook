@@ -74,7 +74,7 @@ public class PlayerServiceImpl implements PlayerService {
 
 	public boolean checkNameAvailable(String name) {
 		Player player = this.playerDao.getPlayerByName(name);
-		return player != null;
+		return player == null;
 	}
 
 	public void addExpirience(PlayerDTO playerDTO, Integer amount) {
@@ -227,16 +227,6 @@ public class PlayerServiceImpl implements PlayerService {
 		return succes;
 	}
 
-	@Required
-	public void setMapper(Mapper mapper) {
-		this.mapper = mapper;
-	}
-
-	@Required
-	public void setPlayerDao(PlayerDao playerDao) {
-		this.playerDao = playerDao;
-	}
-
 	private Integer calculateLevel(PlayerDTO playerDTO) {
 		return (int) (Math.log(playerDTO.getExpirience() + LOGARITHM_BASE) / Math
 				.log(LOGARITHM_BASE));
@@ -262,4 +252,19 @@ public class PlayerServiceImpl implements PlayerService {
 		return amount == SOCIAL_STATS_AMOUNT;
 	}
 
+	public boolean update(PlayerDTO playerDTO) {
+		Player player = this.mapper.map(playerDTO, Player.class);
+		this.playerDao.update(player);
+		return true;
+	}
+
+	@Required
+	public void setMapper(Mapper mapper) {
+		this.mapper = mapper;
+	}
+
+	@Required
+	public void setPlayerDao(PlayerDao playerDao) {
+		this.playerDao = playerDao;
+	}
 }

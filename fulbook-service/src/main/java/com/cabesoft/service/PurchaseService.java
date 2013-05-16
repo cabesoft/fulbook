@@ -18,8 +18,15 @@ public interface PurchaseService {
 	boolean buySocialItemWithToken(PlayerDTO playerDTO,
 			SocialItemDTO socialItemDTO);
 
-	boolean sellPhysicalItem(PlayerDTO playerDTO,
+	boolean sellPhysicalItemFromInventory(PlayerDTO playerDTO,
 			PhysicalItemDTO physicalItemDTO);
 
-	boolean sellSocialItem(PlayerDTO playerDTO, SocialItemDTO socialItemDTO);
+	boolean sellPhysicalItemEquiped(PlayerDTO playerDTO,
+			PhysicalItemDTO physicalItemDTO);
+
+	boolean sellSocialItemFromInventory(PlayerDTO playerDTO,
+			SocialItemDTO socialItemDTO);
+
+	boolean sellSocialItemEquiped(PlayerDTO playerDTO,
+			SocialItemDTO socialItemDTO);
 }
