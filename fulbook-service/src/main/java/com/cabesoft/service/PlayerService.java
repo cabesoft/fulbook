@@ -1,11 +1,10 @@
 package com.cabesoft.service;
 
-import java.util.Collection;
+import java.util.Map;
 
-import com.cabesoft.domain.model.PhysicalStatAmount;
-import com.cabesoft.domain.model.SocialStatAmount;
+import com.cabesoft.domain.enums.PhysicalStat;
+import com.cabesoft.domain.enums.SocialStat;
 import com.cabesoft.model.dto.PhysicalItemDTO;
-import com.cabesoft.model.dto.PhysicalStatDTO;
 import com.cabesoft.model.dto.PlayerDTO;
 import com.cabesoft.model.dto.SocialItemDTO;
 
@@ -16,8 +15,8 @@ public interface PlayerService {
 	PlayerDTO getPlayerByName(String name);
 
 	PlayerDTO createPlayer(String name, String face,
-			Collection<PhysicalStatAmount> physicalStatAmounts,
-			Collection<SocialStatAmount> socialStatAmount);
+			Map<PhysicalStat, Integer> physicalStatAmounts,
+			Map<SocialStat, Integer> socialStatAmount);
 
 	boolean checkNameAvailable(String name);
 
@@ -25,13 +24,19 @@ public interface PlayerService {
 
 	boolean equipPhysicalItem(PlayerDTO player, PhysicalItemDTO physicalItem);
 
-	boolean equipSocialItem(PlayerDTO player, SocialItemDTO physicalItem);
+	boolean equipSocialItem(PlayerDTO player, SocialItemDTO socialItem);
 
 	boolean unEquipPhysicalItem(PlayerDTO player, PhysicalItemDTO physicalItem);
 
-	boolean unEquipSocialItem(PlayerDTO player, SocialItemDTO physicalItem);
+	boolean unEquipSocialItem(PlayerDTO player, SocialItemDTO socialItem);
 
-	boolean addPointToPhysicalStat(PlayerDTO challenger,
-			PhysicalStatDTO PhysicalStat);
+	boolean addPointToPhysicalStat(PlayerDTO playerDTO,
+			PhysicalStat physicalStat, Integer amount);
 
+	boolean addPointToSocialStat(PlayerDTO playerDTO, SocialStat socialStat,
+			Integer amount);
+
+	boolean roomOnInventory(PlayerDTO playerDTO);
+
+	boolean update(PlayerDTO playerDTO);
 }

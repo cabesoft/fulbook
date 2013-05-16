@@ -5,7 +5,7 @@ import java.io.Serializable;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import com.cabesoft.domain.dao.TeamStatDao;
-import com.cabesoft.domain.model.TeamStat;
+import com.cabesoft.domain.enums.TeamStat;
 
 
 public class TeamStatDaoImpl extends HibernateDaoSupport implements  TeamStatDao{

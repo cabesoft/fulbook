@@ -1,23 +1,29 @@
 package com.cabesoft.model.dto;
 
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.cabesoft.domain.enums.SocialSlot;
+import com.cabesoft.domain.enums.SocialStat;
 
-public class SocialItemDTO extends ItemDTO{
+public class SocialItemDTO extends ItemDTO {
 	private SocialSlot slot;
-	private  Set<SocialStatAmountDTO> stats;
-	
+	private Map<SocialStat, Integer> stats = new HashMap<SocialStat, Integer>();
+
 	public SocialSlot getSlot() {
 		return slot;
 	}
+
 	public void setSlot(SocialSlot slot) {
 		this.slot = slot;
 	}
-	public Set<SocialStatAmountDTO> getStats() {
+
+	public Map<SocialStat, Integer> getStats() {
 		return stats;
 	}
-	public void setStats(Set<SocialStatAmountDTO> stats) {
+
+	public void setStats(Map<SocialStat, Integer> stats) {
 		this.stats = stats;
 	}
+
 }

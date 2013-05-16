@@ -12,7 +12,6 @@ import com.cabesoft.domain.model.Team;
 import com.cabesoft.model.dto.MoneyDTO;
 import com.cabesoft.model.dto.PlayerDTO;
 import com.cabesoft.model.dto.TeamDTO;
-import com.cabesoft.model.dto.TeamItemEquipedDTO;
 import com.cabesoft.service.LeagueService;
 import com.cabesoft.service.PlayerService;
 import com.cabesoft.service.TeamService;
@@ -49,7 +48,6 @@ public class TeamServiceImpl implements TeamService {
 			Set<PlayerDTO> players = new HashSet<PlayerDTO>();
 			players.add(captain);
 			teamDTO.setPlayers(players);
-			teamDTO.setTeamItems(new HashSet<TeamItemEquipedDTO>());
 
 			Team team = this.mapper.map(teamDTO, Team.class);
 			Integer teamId = (Integer) this.teamDao.save(team);

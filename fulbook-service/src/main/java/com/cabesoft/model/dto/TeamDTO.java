@@ -1,5 +1,6 @@
 package com.cabesoft.model.dto;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -21,7 +22,9 @@ public class TeamDTO {
 
 	private boolean active;
 
-	private Map<TeamSlot, TeamItemDTO> teamItems;
+	private Map<TeamSlot, TeamItemDTO> itemsEquiped;
+
+	private List<TeamItemDTO> teamItems;
 
 	public Integer getId() {
 		return id;
@@ -87,11 +90,19 @@ public class TeamDTO {
 		this.active = active;
 	}
 
-	public Map<TeamSlot, TeamItemDTO> getTeamItems() {
+	public Map<TeamSlot, TeamItemDTO> getItemsEquiped() {
+		return itemsEquiped;
+	}
+
+	public void setTeamItems(Map<TeamSlot, TeamItemDTO> itemsEquiped) {
+		this.itemsEquiped = itemsEquiped;
+	}
+
+	public List<TeamItemDTO> getTeamItems() {
 		return teamItems;
 	}
 
-	public void setTeamItems(Map<TeamSlot, TeamItemDTO> teamItems) {
+	public void setItemsEquiped(List<TeamItemDTO> teamItems) {
 		this.teamItems = teamItems;
 	}
 

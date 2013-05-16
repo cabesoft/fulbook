@@ -5,7 +5,7 @@ import java.io.Serializable;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import com.cabesoft.domain.dao.SocialStatDao;
-import com.cabesoft.domain.model.SocialStat;
+import com.cabesoft.domain.enums.SocialStat;
 
 
 public class SocialStatDaoImpl extends HibernateDaoSupport implements SocialStatDao{

@@ -6,11 +6,27 @@ import com.cabesoft.model.dto.SocialItemDTO;
 
 public interface PurchaseService {
 
-	boolean buyPhysicalItem(PlayerDTO player, PhysicalItemDTO physicalItem);
+	boolean buyPhysicalItemWithFake(PlayerDTO playerDTO,
+			PhysicalItemDTO physicalItemDTO);
 
-	boolean buySocialItem(PlayerDTO player, SocialItemDTO socialItem);
+	boolean buyPhysicalItemWithToken(PlayerDTO playerDTO,
+			PhysicalItemDTO physicalItemDTO);
 
-	boolean sellPhysicalItem(PlayerDTO player, PhysicalItemDTO physicalItem);
+	boolean buySocialItemWithFake(PlayerDTO playerDTO,
+			SocialItemDTO socialItemDTO);
 
-	boolean sellSocialItem(PlayerDTO player, SocialItemDTO socialItem);
+	boolean buySocialItemWithToken(PlayerDTO playerDTO,
+			SocialItemDTO socialItemDTO);
+
+	boolean sellPhysicalItemFromInventory(PlayerDTO playerDTO,
+			PhysicalItemDTO physicalItemDTO);
+
+	boolean sellPhysicalItemEquiped(PlayerDTO playerDTO,
+			PhysicalItemDTO physicalItemDTO);
+
+	boolean sellSocialItemFromInventory(PlayerDTO playerDTO,
+			SocialItemDTO socialItemDTO);
+
+	boolean sellSocialItemEquiped(PlayerDTO playerDTO,
+			SocialItemDTO socialItemDTO);
 }

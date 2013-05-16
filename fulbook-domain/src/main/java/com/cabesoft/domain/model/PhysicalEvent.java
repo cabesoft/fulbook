@@ -16,6 +16,7 @@ public class PhysicalEvent extends Event {
 	private Integer expiriencie;
 	private Integer energy;
 	private Set<PhysicalItem> itemsRequired;
+	private Integer fakeMoney;
 
 	public PhysicalEvent() {
 	}
@@ -45,6 +46,14 @@ public class PhysicalEvent extends Event {
 
 	public void setItemsRequired(Set<PhysicalItem> itemsRequired) {
 		this.itemsRequired = itemsRequired;
+	}
+
+	public Integer getFakeMoney() {
+		return fakeMoney;
+	}
+
+	public void setFakeMoney(Integer fakeMoney) {
+		this.fakeMoney = fakeMoney;
 	}
 
 }

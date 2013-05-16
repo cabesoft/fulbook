@@ -1,23 +1,31 @@
 package com.cabesoft.model.dto;
 
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.cabesoft.domain.enums.PhysicalSlot;
+import com.cabesoft.domain.enums.PhysicalStat;
 
-public class PhysicalItemDTO  extends ItemDTO{
+public class PhysicalItemDTO extends ItemDTO {
 	private PhysicalSlot slot;
-	private Set<PhysicalStatAmountDTO> stats;
-	
+	private Map<PhysicalStat, Integer> stats = new HashMap<PhysicalStat, Integer>();
+
+	public PhysicalItemDTO() {
+	}
+
 	public PhysicalSlot getSlot() {
 		return slot;
 	}
+
 	public void setSlot(PhysicalSlot slot) {
 		this.slot = slot;
 	}
-	public Set<PhysicalStatAmountDTO> getStats() {
+
+	public Map<PhysicalStat, Integer> getStats() {
 		return stats;
 	}
-	public void setStats(Set<PhysicalStatAmountDTO> stats) {
+
+	public void setStats(Map<PhysicalStat, Integer> stats) {
 		this.stats = stats;
 	}
 

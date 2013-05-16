@@ -1,17 +1,17 @@
 package com.cabesoft.service.impl;
 
-import java.util.Collection;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Required;
 
 import com.cabesoft.domain.dao.PlayerDao;
-import com.cabesoft.domain.model.PhysicalStatAmount;
+import com.cabesoft.domain.enums.PhysicalStat;
+import com.cabesoft.domain.enums.SocialStat;
 import com.cabesoft.domain.model.Player;
-import com.cabesoft.domain.model.SocialStatAmount;
 import com.cabesoft.domain.utils.Money;
 import com.cabesoft.model.dto.PhysicalItemDTO;
-import com.cabesoft.model.dto.PhysicalStatDTO;
 import com.cabesoft.model.dto.PlayerDTO;
 import com.cabesoft.model.dto.SocialItemDTO;
 import com.cabesoft.service.PlayerService;
@@ -29,7 +29,10 @@ public class PlayerServiceImpl implements PlayerService {
 	private static final Integer SOCIAL_STATS_AMOUNT = 5;
 	private static final Integer FAKE_MONEY = 100;
 	private static final Integer TOKEN_MONEY = 5;
-	private static final int[] expirienceArray = { 0, 50, 100, 300 };
+	private static final int INVENTORY_SIZE = 5;
+	private static final Integer PHYSICAL_POINTS_TO_ADD_PER_LEVEL = 5;
+	private static final Integer SOCIAL_POINTS_TO_ADD_PER_LEVEL = 3;
+	private static final double LOGARITHM_BASE = 3;
 
 	public PlayerDTO getPlayerByName(String name) {
 		Player player = this.playerDao.getPlayerByName(name);
@@ -37,8 +40,8 @@ public class PlayerServiceImpl implements PlayerService {
 	}
 
 	public PlayerDTO createPlayer(String name, String face,
-			Collection<PhysicalStatAmount> physicalStatAmounts,
-			Collection<SocialStatAmount> socialStatAmount) {
+			Map<PhysicalStat, Integer> physicalStatAmounts,
+			Map<SocialStat, Integer> socialStatAmount) {
 		if (this.verifyPhysicalStatAmount(physicalStatAmounts)
 				&& this.verifySocialStatAmount(socialStatAmount)
 				&& this.checkNameAvailable(name)) {
@@ -65,49 +68,194 @@ public class PlayerServiceImpl implements PlayerService {
 
 	}
 
+	public PlayerDTO getPlayerById(Integer id) {
+		return this.mapper.map(this.playerDao.get(id), PlayerDTO.class);
+	}
+
 	public boolean checkNameAvailable(String name) {
 		Player player = this.playerDao.getPlayerByName(name);
-		return player != null;
+		return player == null;
 	}
 
 	public void addExpirience(PlayerDTO playerDTO, Integer amount) {
+		Integer previousLevel = playerDTO.getLevel();
 		playerDTO.setExpirience(playerDTO.getExpirience() + amount);
-		int level = 1;
-		while (playerDTO.getExpirience() > expirienceArray[level]) {
-			level++;
+		// calculo el nivel nuevo con la experiencia sumada
+		Integer newLevel = this.calculateLevel(playerDTO);
+		playerDTO.setLevel(newLevel);
+
+		int i;
+		// por cada nivel que subio le sumo puntos que se puede agregar!
+		for (i = 0; i < newLevel - previousLevel; i++) {
+			playerDTO.setPhysicalPointsToAsign(playerDTO
+					.getPhysicalPointsToAsign()
+					+ PHYSICAL_POINTS_TO_ADD_PER_LEVEL);
+			playerDTO.setSocialPointsToAsign(playerDTO.getSocialPointsToAsign()
+					+ SOCIAL_POINTS_TO_ADD_PER_LEVEL);
 		}
-		playerDTO.setLevel(level);
+		Player player = mapper.map(playerDTO, Player.class);
+		this.playerDao.update(player);
+
+	}
+
+	public boolean equipPhysicalItem(PlayerDTO playerDTO,
+			PhysicalItemDTO physicalItem) {
+		boolean succes;
+		// verifico que lo tenga en el inventario y que le de el nivel
+		if (playerDTO.getPhysicalItems().contains(physicalItem)
+				&& playerDTO.getLevel() >= physicalItem.getRequiredLevel()) {
+			// verifico si tiene un item en la posicion
+			if (playerDTO.getBodyParts().get(physicalItem.getSlot()) != null) {
+				PhysicalItemDTO bodyItem = playerDTO.getBodyParts().get(
+						physicalItem.getSlot());
+				playerDTO.getPhysicalItems().add(bodyItem);
+			}
+			// en cualquier caso le seteo el item en la body part y lo saco del
+			// inventario
+			playerDTO.getBodyParts().put(physicalItem.getSlot(), physicalItem);
+			playerDTO.getPhysicalItems().remove(physicalItem);
+			Player player = mapper.map(playerDTO, Player.class);
+			this.playerDao.update(player);
+			succes = true;
+
+		} else {
+			succes = false;
+		}
+		return succes;
+	}
+
+	public boolean equipSocialItem(PlayerDTO playerDTO, SocialItemDTO socialItem) {
+		boolean succes;
+		// verifico que lo tenga en el inventario y que le de el nivel
+		if (playerDTO.getSocialItems().contains(socialItem)
+				&& playerDTO.getLevel() >= socialItem.getRequiredLevel()) {
+			// verifico si tiene un item en la posicion
+			if (playerDTO.getSocialParts().get(socialItem.getSlot()) != null) {
+				SocialItemDTO bodyItem = playerDTO.getSocialParts().get(
+						socialItem.getSlot());
+				playerDTO.getSocialItems().add(bodyItem);
+			}
+			// en cualquier caso le seteo el item en la body part y lo saco del
+			// inventario
+			playerDTO.getSocialParts().put(socialItem.getSlot(), socialItem);
+			playerDTO.getSocialItems().remove(socialItem);
+			Player player = mapper.map(playerDTO, Player.class);
+			this.playerDao.update(player);
+			succes = true;
+
+		} else {
+			succes = false;
+		}
+		return succes;
+	}
+
+	public boolean unEquipPhysicalItem(PlayerDTO playerDTO,
+			PhysicalItemDTO physicalItem) {
+		boolean succes = false;
+		// verifico si lo tiene equipado y si tiene lugar para pasarlo al
+		// inventario
+		if (physicalItem.equals(playerDTO.getBodyParts().get(
+				physicalItem.getSlot()))
+				&& this.roomOnInventory(playerDTO)) {
+			succes = true;
+			playerDTO.getPhysicalItems().add(physicalItem);
+			playerDTO.getBodyParts().put(physicalItem.getSlot(), physicalItem);
+			Player player = mapper.map(playerDTO, Player.class);
+			this.playerDao.update(player);
+		}
+		return succes;
+	}
+
+	public boolean unEquipSocialItem(PlayerDTO playerDTO,
+			SocialItemDTO socialItem) {
+		boolean succes = false;
+		// verifico si lo tiene equipado y si tiene lugar para pasarlo al
+		// inventario
+		if (socialItem.equals(playerDTO.getSocialParts().get(
+				socialItem.getSlot()))
+				&& this.roomOnInventory(playerDTO)) {
+			succes = true;
+			playerDTO.getSocialItems().add(socialItem);
+			playerDTO.getSocialParts().put(socialItem.getSlot(), socialItem);
+			Player player = mapper.map(playerDTO, Player.class);
+			this.playerDao.update(player);
+		}
+		return succes;
+	}
+
+	public boolean roomOnInventory(PlayerDTO playerDTO) {
+		return playerDTO.getSocialItems().size()
+				+ playerDTO.getPhysicalItems().size() < INVENTORY_SIZE;
+	}
+
+	public boolean addPointToPhysicalStat(PlayerDTO playerDTO,
+			PhysicalStat physicalStat, Integer amount) {
+		boolean succes;
+		if (amount < playerDTO.getPhysicalPointsToAsign()) {
+			succes = true;
+			Integer previus = playerDTO.getPhysicalStatAmounts().get(
+					physicalStat);
+			if (previus == null) {
+				previus = 0;
+			}
+			playerDTO.getPhysicalStatAmounts().put(physicalStat,
+					previus + amount);
+			playerDTO.setPhysicalPointsToAsign(playerDTO
+					.getPhysicalPointsToAsign() - amount);
+
+		} else {
+			succes = false;
+		}
+		return succes;
+	}
+
+	public boolean addPointToSocialStat(PlayerDTO playerDTO,
+			SocialStat socialStat, Integer amount) {
+		boolean succes;
+		if (amount < playerDTO.getSocialPointsToAsign()) {
+			succes = true;
+			Integer previus = playerDTO.getSocialStatAmounts().get(socialStat);
+			if (previus == null) {
+				previus = 0;
+			}
+			playerDTO.getSocialStatAmounts().put(socialStat, previus + amount);
+			playerDTO.setSocialPointsToAsign(playerDTO.getSocialPointsToAsign()
+					- amount);
+		} else {
+			succes = false;
+		}
+		return succes;
+	}
+
+	private Integer calculateLevel(PlayerDTO playerDTO) {
+		return (int) (Math.log(playerDTO.getExpirience() + LOGARITHM_BASE) / Math
+				.log(LOGARITHM_BASE));
+	}
+
+	private boolean verifyPhysicalStatAmount(
+			Map<PhysicalStat, Integer> physicalStatAmounts) {
+
+		Integer amount = 0;
+		for (Entry<PhysicalStat, Integer> entry : physicalStatAmounts
+				.entrySet()) {
+			amount = amount + entry.getValue();
+		}
+		return amount == PHYSICAL_STATS_AMOUNT;
+	}
+
+	private boolean verifySocialStatAmount(
+			Map<SocialStat, Integer> socialStatAmount) {
+		Integer amount = 0;
+		for (Entry<SocialStat, Integer> entry : socialStatAmount.entrySet()) {
+			amount = amount + entry.getValue();
+		}
+		return amount == SOCIAL_STATS_AMOUNT;
+	}
+
+	public boolean update(PlayerDTO playerDTO) {
 		Player player = this.mapper.map(playerDTO, Player.class);
 		this.playerDao.update(player);
-	}
-
-	public boolean equipPhysicalItem(PlayerDTO player,
-			PhysicalItemDTO physicalItem) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public boolean equipSocialItem(PlayerDTO player, SocialItemDTO physicalItem) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public boolean unEquipPhysicalItem(PlayerDTO player,
-			PhysicalItemDTO physicalItem) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public boolean unEquipSocialItem(PlayerDTO player,
-			SocialItemDTO physicalItem) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	public boolean addPointToPhysicalStat(PlayerDTO challenger,
-			PhysicalStatDTO PhysicalStat) {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Required
@@ -118,30 +266,5 @@ public class PlayerServiceImpl implements PlayerService {
 	@Required
 	public void setPlayerDao(PlayerDao playerDao) {
 		this.playerDao = playerDao;
-	}
-
-	private boolean verifySocialStatAmount(
-			Collection<SocialStatAmount> socialStatAmounts) {
-		// TODO aca se podria verificar que existan todas las caracteristicas
-		Integer acum = 0;
-		for (SocialStatAmount socialStatAmount : socialStatAmounts) {
-			acum = acum + socialStatAmount.getAmount();
-		}
-		return acum == SOCIAL_STATS_AMOUNT;
-	}
-
-	private boolean verifyPhysicalStatAmount(
-			Collection<PhysicalStatAmount> physicalStatAmounts) {
-		// TODO aca se podria verificar que existan todas las caracteristicas
-		Integer acum = 0;
-		for (PhysicalStatAmount physicalStatAmount : physicalStatAmounts) {
-			acum = acum + physicalStatAmount.getAmount();
-		}
-		return acum == PHYSICAL_STATS_AMOUNT;
-	}
-
-	public PlayerDTO getPlayerById(Integer id) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

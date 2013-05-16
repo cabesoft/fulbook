@@ -1,12 +1,14 @@
 package com.cabesoft.model.dto;
 
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import com.cabesoft.domain.enums.FieldPosition;
 import com.cabesoft.domain.enums.PhysicalSlot;
+import com.cabesoft.domain.enums.PhysicalStat;
 import com.cabesoft.domain.enums.PlayerBehavior;
 import com.cabesoft.domain.enums.SocialSlot;
+import com.cabesoft.domain.enums.SocialStat;
 
 public class PlayerDTO {
 	private Integer id;
@@ -17,9 +19,9 @@ public class PlayerDTO {
 
 	private Integer physicalEnergy;
 
-	private Map<PhysicalSlot, PhysicalItemDTO> physicalItems;
+	private Map<PhysicalSlot, PhysicalItemDTO> bodyParts;
 
-	private Map<SocialSlot, SocialItemDTO> socialItems;
+	private Map<SocialSlot, SocialItemDTO> socialParts;
 
 	private Integer competitiveEnergy;
 
@@ -33,9 +35,9 @@ public class PlayerDTO {
 
 	private MoneyDTO money;
 
-	private Set<SocialStatAmountDTO> socialStatAmounts;
+	private Map<SocialStat, Integer> socialStatAmounts;
 
-	private Set<PhysicalStatAmountDTO> physicalStatAmounts;
+	private Map<PhysicalStat, Integer> physicalStatAmounts;
 
 	private FieldPosition position;
 	// puntos en cada una de las posiciones para ese campeonato
@@ -53,6 +55,12 @@ public class PlayerDTO {
 	private Integer defenseRankingPoints;
 
 	private Integer attackRankingPoints;
+
+	private Integer physicalPointsToAsign;
+	private Integer socialPointsToAsign;
+
+	private List<PhysicalItemDTO> physicalItems;
+	private List<SocialItemDTO> socialItems;
 
 	public Integer getId() {
 		return id;
@@ -84,14 +92,6 @@ public class PlayerDTO {
 
 	public MoneyDTO getMoney() {
 		return money;
-	}
-
-	public Set<SocialStatAmountDTO> getSocialStatAmounts() {
-		return socialStatAmounts;
-	}
-
-	public Set<PhysicalStatAmountDTO> getPhysicalStatAmounts() {
-		return physicalStatAmounts;
 	}
 
 	public FieldPosition getPosition() {
@@ -154,15 +154,6 @@ public class PlayerDTO {
 		this.money = money;
 	}
 
-	public void setSocialStatAmounts(Set<SocialStatAmountDTO> socialStatAmounts) {
-		this.socialStatAmounts = socialStatAmounts;
-	}
-
-	public void setPhysicalStatAmounts(
-			Set<PhysicalStatAmountDTO> physicalStatAmounts) {
-		this.physicalStatAmounts = physicalStatAmounts;
-	}
-
 	public void setPosition(FieldPosition position) {
 		this.position = position;
 	}
@@ -199,14 +190,6 @@ public class PlayerDTO {
 		return physicalEnergy;
 	}
 
-	public Map<PhysicalSlot, PhysicalItemDTO> getPhysicalItems() {
-		return physicalItems;
-	}
-
-	public Map<SocialSlot, SocialItemDTO> getSocialItems() {
-		return socialItems;
-	}
-
 	public void setTeam(TeamDTO team) {
 		this.team = team;
 	}
@@ -215,12 +198,69 @@ public class PlayerDTO {
 		this.physicalEnergy = physicalEnergy;
 	}
 
-	public void setPhysicalItems(
-			Map<PhysicalSlot, PhysicalItemDTO> physicalItems) {
+	public Map<PhysicalSlot, PhysicalItemDTO> getBodyParts() {
+		return bodyParts;
+	}
+
+	public Map<SocialSlot, SocialItemDTO> getSocialParts() {
+		return socialParts;
+	}
+
+	public List<PhysicalItemDTO> getPhysicalItems() {
+		return physicalItems;
+	}
+
+	public List<SocialItemDTO> getSocialItems() {
+		return socialItems;
+	}
+
+	public void setBodyParts(Map<PhysicalSlot, PhysicalItemDTO> bodyParts) {
+		this.bodyParts = bodyParts;
+	}
+
+	public void setSocialParts(Map<SocialSlot, SocialItemDTO> socialParts) {
+		this.socialParts = socialParts;
+	}
+
+	public void setPhysicalItems(List<PhysicalItemDTO> physicalItems) {
 		this.physicalItems = physicalItems;
 	}
 
-	public void setSocialItems(Map<SocialSlot, SocialItemDTO> socialItems) {
+	public void setSocialItems(List<SocialItemDTO> socialItems) {
 		this.socialItems = socialItems;
 	}
+
+	public Integer getPhysicalPointsToAsign() {
+		return physicalPointsToAsign;
+	}
+
+	public Integer getSocialPointsToAsign() {
+		return socialPointsToAsign;
+	}
+
+	public void setPhysicalPointsToAsign(Integer physicalPointsToAsign) {
+		this.physicalPointsToAsign = physicalPointsToAsign;
+	}
+
+	public void setSocialPointsToAsign(Integer socialPointsToAsign) {
+		this.socialPointsToAsign = socialPointsToAsign;
+	}
+
+	public Map<SocialStat, Integer> getSocialStatAmounts() {
+		return socialStatAmounts;
+	}
+
+	public Map<PhysicalStat, Integer> getPhysicalStatAmounts() {
+		return physicalStatAmounts;
+	}
+
+	public void setSocialStatAmounts(Map<SocialStat, Integer> socialStatAmounts) {
+		this.socialStatAmounts = socialStatAmounts;
+	}
+
+	public void setPhysicalStatAmounts(
+			Map<PhysicalStat, Integer> physicalStatAmounts) {
+		this.physicalStatAmounts = physicalStatAmounts;
+	}
+
 }

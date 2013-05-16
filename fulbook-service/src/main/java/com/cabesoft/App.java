@@ -1,19 +1,17 @@
 package com.cabesoft;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.dozer.DozerBeanMapper;
+import org.dozer.Mapper;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.cabesoft.domain.dao.impl.PhysicalStatDaoImpl;
-import com.cabesoft.domain.dao.impl.SocialStatDaoImpl;
-import com.cabesoft.domain.model.PhysicalStat;
-import com.cabesoft.domain.model.PhysicalStatAmount;
-import com.cabesoft.domain.model.SocialStat;
-import com.cabesoft.domain.model.SocialStatAmount;
-import com.cabesoft.model.dto.PlayerDTO;
-import com.cabesoft.service.PlayerService;
+import com.cabesoft.domain.dao.impl.PlayerDaoImpl;
+import com.cabesoft.domain.enums.PhysicalStat;
+import com.cabesoft.domain.enums.SocialStat;
+import com.cabesoft.service.impl.PlayerServiceImpl;
 
 //import com.cabesoft.domain.dao.PlayerDAO;
 //import com.cabesoft.domain.model.Player;
@@ -22,74 +20,26 @@ public class App {
 	public static void main(String[] args) {
 		ApplicationContext appContext = new ClassPathXmlApplicationContext(
 				"com/cabesoft/service/applicationContext.xml");
-		PhysicalStatDaoImpl physicalStatDaoImpl = (PhysicalStatDaoImpl) appContext
-				.getBean("physicalStatDao");
 
-		PhysicalStat physicalStat = new PhysicalStat();
-		physicalStat.setName("destreza");
-		physicalStatDaoImpl.save(physicalStat);
+		Mapper mapper = new DozerBeanMapper();
+		PlayerDaoImpl playerDao = (PlayerDaoImpl) appContext
+				.getBean("playerDao");
+		PlayerServiceImpl playerService = new PlayerServiceImpl();
+		playerService.setMapper(mapper);
+		playerService.setPlayerDao(playerDao);
 
-		physicalStatDaoImpl.save(physicalStat);
-
-		PhysicalStatAmount physicalStatAmount = new PhysicalStatAmount(
-				physicalStat, 20);
-		Set<PhysicalStatAmount> physicalItemStats = new HashSet<PhysicalStatAmount>();
-		physicalItemStats.add(physicalStatAmount);
+		Map<PhysicalStat, Integer> physicalStats = new HashMap<PhysicalStat, Integer>();
+		physicalStats.put(PhysicalStat.STRENGTH, 20);
 
 		// same for social
 
-		SocialStatDaoImpl socialStatDaoImpl = (SocialStatDaoImpl) appContext
-				.getBean("socialStatDao");
+		Map<SocialStat, Integer> socialStats = new HashMap<SocialStat, Integer>();
+		socialStats.put(SocialStat.HAPPINESS, 5);
 
-		SocialStat socialStat = new SocialStat();
-		socialStat.setName("felicidad");
-		socialStatDaoImpl.save(socialStat);
+		playerService.createPlayer("messi", "cara de mongo", physicalStats,
+				socialStats);
+		System.out.println("Done");
 
-		socialStatDaoImpl.save(socialStat);
-
-		SocialStatAmount socialStatAmount = new SocialStatAmount(socialStat, 5);
-		Set<SocialStatAmount> socialItemStats = new HashSet<SocialStatAmount>();
-		socialItemStats.add(socialStatAmount);
-
-		PlayerService playerService = (PlayerService) appContext
-				.getBean("playerService");
-
-		PlayerDTO messi = playerService.createPlayer("messi", "1",
-				physicalItemStats, socialItemStats);
-
-		// PhysicalStatDaoImpl physicalStatDaoImpl=
-		// (PhysicalStatDaoImpl)appContext.getBean("physicalStatDao");
-		//
-		// //creo el item
-		// PhysicalItem physicalItem = new PhysicalItem();
-		// physicalItem.setDescription("pi");
-		// physicalItem.setName("ojotas");
-		// physicalItem.setRequiredLevel(1);
-		// physicalItem.setSlot(PhysicalSlot.FEET);
-		//
-		//
-		//
-		// creo una stat
-		// PhysicalStat physicalStat= new PhysicalStat();
-		// physicalStat.setName("destreza");
-		// physicalStatDaoImpl.save(physicalStat);
-		//
-		// //creo un physical stat amount y se lo agrego al item
-		// PhysicalStatAmount physicalStatAmount= new PhysicalStatAmount();
-		// physicalStatAmount.setStat(physicalStat);
-		// physicalStatAmount.setAmount(9);
-		// Set<PhysicalStatAmount> physicalItemStats= new
-		// HashSet<PhysicalStatAmount>();
-		// physicalItemStats.add(physicalStatAmount);
-		// physicalItem.setStats(physicalItemStats);
-		//
-		// //persisto el item
-		// PhysicalItemDaoImpl physicalItemDaoImpl=
-		// (PhysicalItemDaoImpl)appContext.getBean("physicalItemDaoImpl");
-		// physicalItemDaoImpl.save(physicalItem);
-		//
-		// creo el jugador y le asingo el item creado
-
-		System.out.println("Done" + messi);
 	}
+
 }
