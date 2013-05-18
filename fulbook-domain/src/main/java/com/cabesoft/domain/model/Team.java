@@ -1,7 +1,6 @@
 package com.cabesoft.domain.model;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -13,10 +12,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapKeyClass;
 import javax.persistence.OneToMany;
 
-import com.cabesoft.domain.enums.TeamSlot;
 import com.cabesoft.domain.utils.Money;
 
 @Entity
@@ -33,17 +30,24 @@ public class Team {
 
 	private Money money;
 
-	private Map<TeamSlot, TeamItem> itemsEquiped;
-
-	private List<TeamItem> teamItems;
-
 	private boolean active;
+	
+	private List<TeamItemEquiped> teamItems;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE)
 	@Column(name = "oid")
 	public Integer getId() {
 		return id;
+	}
+	
+	@OneToMany(cascade= CascadeType.ALL, fetch = FetchType.EAGER)
+	public List<TeamItemEquiped> getTeamItems() {
+		return teamItems;
+	}
+
+	public void setTeamItems(List<TeamItemEquiped> teamItems) {
+		this.teamItems = teamItems;
 	}
 
 	public void setId(Integer id) {
@@ -113,23 +117,6 @@ public class Team {
 		this.active = active;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL)
-	@MapKeyClass(value = TeamSlot.class)
-	public Map<TeamSlot, TeamItem> getItemsEquiped() {
-		return itemsEquiped;
-	}
 
-	public void setItemsEquiped(Map<TeamSlot, TeamItem> itemsEquiped) {
-		this.itemsEquiped = itemsEquiped;
-	}
-
-	@OneToMany(cascade = CascadeType.ALL)
-	public List<TeamItem> getTeamItems() {
-		return teamItems;
-	}
-
-	public void setTeamItems(List<TeamItem> teamItems) {
-		this.teamItems = teamItems;
-	}
 
 }

@@ -265,7 +265,8 @@ public class PlayerServiceImplTest {
 		Map<SocialStat, Integer> socialItemStats = new HashMap<SocialStat, Integer>();
 		socialItemStats.put(SocialStat.HAPPINESS, 100);
 
-		return new Player("messi", "1", socialItemStats, physicalItemStats);
+		// return new Player("messi", "1", socialItemStats, physicalItemStats);
+		return null;
 	}
 
 	private PhysicalItemDTO createPhysicalItemDTO() {

@@ -3,6 +3,8 @@ package com.cabesoft.domain.dao.impl;
 import java.io.Serializable;
 
 import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import com.cabesoft.domain.dao.PlayerDao;
@@ -11,9 +13,15 @@ import com.cabesoft.domain.model.Player;
 public class PlayerDaoImpl extends HibernateDaoSupport implements PlayerDao {
 
 	private static final String FIND_BY_NAME_QUERY = "from Player where name= :name";
-
+	private Session session = this.getSession();
 	public Serializable save(Player newInstance) {
-		return this.getHibernateTemplate().save(newInstance);
+
+
+		Transaction beginTransaction = session.beginTransaction();
+		Serializable ser= this.getHibernateTemplate().save(newInstance);
+		beginTransaction.commit();
+		this.session.flush();
+		return ser;
 	}
 
 	public void update(Player instance) {
@@ -29,10 +37,14 @@ public class PlayerDaoImpl extends HibernateDaoSupport implements PlayerDao {
 	}
 
 	public Player getPlayerByName(String name) {
-
-		Query query = this.getSession().createQuery(FIND_BY_NAME_QUERY);
+		
+		Transaction beginTransaction = session.beginTransaction();
+		Query query = session.createQuery(FIND_BY_NAME_QUERY);
 		query.setParameter("name", name);
-		return (Player) query.uniqueResult();
+		Player player = (Player) query.uniqueResult();
+		beginTransaction.commit();
+		session.flush();
+		return player;
 	}
 
 }
