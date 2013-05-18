@@ -38,6 +38,7 @@ public class PlayerMapper {
 				.toModel(playerDTO.getPhysicalStatAmounts()));
 		player.setSocialStatAmounts(socialStatAmountMapper.toModel(playerDTO
 				.getSocialStatAmounts()));
+
 		// player.setTeam(team)
 		return player;
 
