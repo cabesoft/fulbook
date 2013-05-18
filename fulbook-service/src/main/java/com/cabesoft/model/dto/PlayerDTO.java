@@ -27,6 +27,8 @@ public class PlayerDTO {
 
 	private Integer socialEnergy;
 
+	private String face;
+
 	private Integer level;
 
 	private Integer expirience;
@@ -261,6 +263,14 @@ public class PlayerDTO {
 	public void setPhysicalStatAmounts(
 			Map<PhysicalStat, Integer> physicalStatAmounts) {
 		this.physicalStatAmounts = physicalStatAmounts;
+	}
+
+	public String getFace() {
+		return face;
+	}
+
+	public void setFace(String face) {
+		this.face = face;
 	}
 
 }
