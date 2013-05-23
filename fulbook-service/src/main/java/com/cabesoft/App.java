@@ -29,8 +29,6 @@ public class App {
 		physicalStat.setName("destreza");
 		physicalStatDaoImpl.save(physicalStat);
 
-		physicalStatDaoImpl.save(physicalStat);
-
 		PhysicalStatAmount physicalStatAmount = new PhysicalStatAmount(
 				physicalStat, 20);
 		Set<PhysicalStatAmount> physicalItemStats = new HashSet<PhysicalStatAmount>();
@@ -43,8 +41,6 @@ public class App {
 
 		SocialStat socialStat = new SocialStat();
 		socialStat.setName("felicidad");
-		socialStatDaoImpl.save(socialStat);
-
 		socialStatDaoImpl.save(socialStat);
 
 		SocialStatAmount socialStatAmount = new SocialStatAmount(socialStat, 5);

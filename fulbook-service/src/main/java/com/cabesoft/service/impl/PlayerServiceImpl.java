@@ -44,8 +44,8 @@ public class PlayerServiceImpl implements PlayerService {
 	}
 
 	public PlayerDTO createPlayer(String name, String face,
-			Collection<PhysicalStatAmount> physicalStatAmounts,
-			Collection<SocialStatAmount> socialStatAmount) {
+			Set<PhysicalStatAmount> physicalStatAmounts,
+			Set<SocialStatAmount> socialStatAmount) {
 		if (this.verifyPhysicalStatAmount(physicalStatAmounts)
 				&& this.verifySocialStatAmount(socialStatAmount)
 				&& this.checkNameAvailable(name)) {
@@ -64,6 +64,8 @@ public class PlayerServiceImpl implements PlayerService {
 			player.setSocialEnergy(SOCIAL_ENERGY);
 			player.setCompetitiveEnergy(COMPETITVE_ENERGY);
 			player.setMoney((new Money(FAKE_MONEY, TOKEN_MONEY)));
+			player.setSocialStatAmounts(socialStatAmount);
+			player.setPhysicalStatAmounts(physicalStatAmounts);
 			this.playerDao.save(player);
 			return this.mapper.map(player, PlayerDTO.class);
 		} else {
@@ -78,7 +80,7 @@ public class PlayerServiceImpl implements PlayerService {
 
 	public boolean checkNameAvailable(String name) {
 		Player player = this.playerDao.getPlayerByName(name);
-		return player != null;
+		return player == null;
 	}
 
 	public void addExpirience(PlayerDTO playerDTO, Integer amount) {

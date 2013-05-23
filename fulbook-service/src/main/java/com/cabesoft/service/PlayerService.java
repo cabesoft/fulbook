@@ -1,6 +1,6 @@
 package com.cabesoft.service;
 
-import java.util.Collection;
+import java.util.Set;
 
 import com.cabesoft.domain.model.PhysicalStatAmount;
 import com.cabesoft.domain.model.SocialStatAmount;
@@ -16,8 +16,8 @@ public interface PlayerService {
 	PlayerDTO getPlayerByName(String name);
 
 	PlayerDTO createPlayer(String name, String face,
-			Collection<PhysicalStatAmount> physicalStatAmounts,
-			Collection<SocialStatAmount> socialStatAmount);
+			Set<PhysicalStatAmount> physicalStatAmounts,
+			Set<SocialStatAmount> socialStatAmount);
 
 	boolean checkNameAvailable(String name);
 
