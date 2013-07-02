@@ -1,13 +1,17 @@
 package com.cabesoft.service.impl;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Required;
 
+import com.cabesoft.domain.dao.PhysicalItemDao;
 import com.cabesoft.domain.dao.PlayerDao;
+import com.cabesoft.domain.dao.SocialItemDao;
 import com.cabesoft.domain.model.PhysicalStatAmount;
 import com.cabesoft.domain.model.Player;
 import com.cabesoft.domain.model.SocialStatAmount;
@@ -19,11 +23,15 @@ import com.cabesoft.model.dto.PlayerDTO;
 import com.cabesoft.model.dto.SocialItemDTO;
 import com.cabesoft.model.dto.SocialStatAmountDTO;
 import com.cabesoft.service.PlayerService;
+import com.cabesoft.service.exception.ValidationException;
 
 public class PlayerServiceImpl implements PlayerService {
 
 	private Mapper mapper;
 	private PlayerDao playerDao;
+	private PhysicalItemDao physicalItemDao;
+	private SocialItemDao socialItemDao;
+
 	private static final Integer ZERO = 0;
 	private static final Integer ONE = 1;
 	private static final Integer PHYSICAL_ENERGY = 100;
@@ -40,15 +48,25 @@ public class PlayerServiceImpl implements PlayerService {
 
 	public PlayerDTO getPlayerByName(String name) {
 		Player player = this.playerDao.getPlayerByName(name);
+		if (player == null) {
+			return null;
+		}
 		return mapper.map(player, PlayerDTO.class);
 	}
 
-	public PlayerDTO createPlayer(String name, String face,
+	public void createPlayer(String name, String face,
 			Set<PhysicalStatAmount> physicalStatAmounts,
-			Set<SocialStatAmount> socialStatAmount) {
-		if (this.verifyPhysicalStatAmount(physicalStatAmounts)
-				&& this.verifySocialStatAmount(socialStatAmount)
-				&& this.checkNameAvailable(name)) {
+			Set<SocialStatAmount> socialStatAmount) throws ValidationException {
+
+		Map<String, String> errors = new HashMap<String, String>();
+
+		this.verifyPhysicalStatAmount(physicalStatAmounts, errors);
+		this.verifySocialStatAmount(socialStatAmount, errors);
+		if (this.checkNameAvailable(name) == false) {
+			errors.put("player", "service.validation.name.not.available");
+		}
+		;
+		if (errors.entrySet().size() == 0) {
 			Player player = new Player();
 			player.setName(name);
 			player.setFace(face);
@@ -67,9 +85,8 @@ public class PlayerServiceImpl implements PlayerService {
 			player.setSocialStatAmounts(socialStatAmount);
 			player.setPhysicalStatAmounts(physicalStatAmounts);
 			this.playerDao.save(player);
-			return this.mapper.map(player, PlayerDTO.class);
 		} else {
-			return null;
+			throw new ValidationException(errors);
 		}
 
 	}
@@ -83,7 +100,8 @@ public class PlayerServiceImpl implements PlayerService {
 		return player == null;
 	}
 
-	public void addExpirience(PlayerDTO playerDTO, Integer amount) {
+	public void addExpirience(Integer playerId, Integer amount) {
+		PlayerDTO playerDTO = this.getPlayerById(playerId);
 		Integer previousLevel = playerDTO.getLevel();
 		playerDTO.setExpirience(playerDTO.getExpirience() + amount);
 		// calculo el nivel nuevo con la experiencia sumada
@@ -104,9 +122,12 @@ public class PlayerServiceImpl implements PlayerService {
 
 	}
 
-	public boolean equipPhysicalItem(PlayerDTO playerDTO,
-			PhysicalItemDTO physicalItem) {
-		boolean succes;
+	public void equipPhysicalItem(Integer playerId, Integer physicalItemId)
+			throws ValidationException {
+		PhysicalItemDTO physicalItem = this.mapper
+				.map(this.physicalItemDao.get(physicalItemId),
+						PhysicalItemDTO.class);
+		PlayerDTO playerDTO = this.getPlayerById(playerId);
 		if (playerDTO.getPhysicalItems().contains(physicalItem)) {
 			// verifico si tiene un item en la posicion
 			if (playerDTO.getBodyParts().get(physicalItem.getSlot()) != null) {
@@ -120,16 +141,21 @@ public class PlayerServiceImpl implements PlayerService {
 			playerDTO.getPhysicalItems().remove(physicalItem);
 			Player player = mapper.map(playerDTO, Player.class);
 			this.playerDao.update(player);
-			succes = true;
 
 		} else {
-			succes = false;
+			Map<String, String> errorMap = new HashMap<String, String>();
+			errorMap.put("equipado",
+					"service.validation.player.does.not.have.item");
+			throw new ValidationException(errorMap);
 		}
-		return succes;
 	}
 
-	public boolean equipSocialItem(PlayerDTO playerDTO, SocialItemDTO socialItem) {
-		boolean succes;
+	public void equipSocialItem(Integer playerId, Integer socialItemId)
+			throws ValidationException {
+
+		SocialItemDTO socialItem = this.mapper.map(
+				this.socialItemDao.get(socialItemId), SocialItemDTO.class);
+		PlayerDTO playerDTO = this.getPlayerById(playerId);
 		if (playerDTO.getSocialItems().contains(socialItem)) {
 			// verifico si tiene un item en la posicion
 			if (playerDTO.getSocialParts().get(socialItem.getSlot()) != null) {
@@ -143,56 +169,75 @@ public class PlayerServiceImpl implements PlayerService {
 			playerDTO.getSocialItems().remove(socialItem);
 			Player player = mapper.map(playerDTO, Player.class);
 			this.playerDao.update(player);
-			succes = true;
 
 		} else {
-			succes = false;
+			Map<String, String> errorMap = new HashMap<String, String>();
+			errorMap.put("equipado",
+					"service.validation.player.does.not.have.item");
+			throw new ValidationException(errorMap);
 		}
-		return succes;
 	}
 
-	public boolean unEquipPhysicalItem(PlayerDTO playerDTO,
-			PhysicalItemDTO physicalItem) {
-		boolean succes = false;
+	public void unEquipPhysicalItem(Integer playerId, Integer physicalItemId)
+			throws ValidationException {
 		// verifico si lo tiene equipado y si tiene lugar para pasarlo al
+
+		PlayerDTO playerDTO = this.getPlayerById(playerId);
+
+		PhysicalItemDTO physicalItem = this.mapper
+				.map(this.physicalItemDao.get(physicalItemId),
+						PhysicalItemDTO.class);
 		// inventario
 		if (physicalItem.equals(playerDTO.getBodyParts().get(
 				physicalItem.getSlot()))
-				&& this.roomOnInventory(playerDTO)) {
-			succes = true;
+				&& this.roomOnInventory(playerDTO.getId())) {
 			playerDTO.getPhysicalItems().add(physicalItem);
 			playerDTO.getBodyParts().put(physicalItem.getSlot(), physicalItem);
 			Player player = mapper.map(playerDTO, Player.class);
 			this.playerDao.update(player);
+		} else {
+			Map<String, String> errorMap = new HashMap<String, String>();
+			errorMap.put("equipado",
+					"service.validation.player.does.not.have.item.equiped");
+			throw new ValidationException(errorMap);
 		}
-		return succes;
 	}
 
-	public boolean unEquipSocialItem(PlayerDTO playerDTO,
-			SocialItemDTO socialItem) {
-		boolean succes = false;
+	public void unEquipSocialItem(Integer playerId, Integer socialItemId)
+			throws ValidationException {
+		PlayerDTO playerDTO = this.getPlayerById(playerId);
+
+		SocialItemDTO socialItem = this.mapper.map(
+				this.socialItemDao.get(socialItemId), SocialItemDTO.class);
 		// verifico si lo tiene equipado y si tiene lugar para pasarlo al
 		// inventario
 		if (socialItem.equals(playerDTO.getSocialParts().get(
 				socialItem.getSlot()))
-				&& this.roomOnInventory(playerDTO)) {
-			succes = true;
+				&& this.roomOnInventory(playerDTO.getId())) {
 			playerDTO.getSocialItems().add(socialItem);
 			playerDTO.getSocialParts().put(socialItem.getSlot(), socialItem);
 			Player player = mapper.map(playerDTO, Player.class);
 			this.playerDao.update(player);
+		} else {
+			Map<String, String> errorMap = new HashMap<String, String>();
+			errorMap.put("equipado",
+					"service.validation.player.does.not.have.item");
+			throw new ValidationException(errorMap);
 		}
-		return succes;
 	}
 
-	public boolean roomOnInventory(PlayerDTO playerDTO) {
+	public boolean roomOnInventory(Integer playerId) {
+		PlayerDTO playerDTO = this.getPlayerById(playerId);
+
 		return playerDTO.getSocialItems().size()
 				+ playerDTO.getPhysicalItems().size() <= INVENTORY_SIZE;
 	}
 
-	public boolean addPointToPhysicalStat(PlayerDTO playerDTO,
-			PhysicalStatDTO physicalStat, Integer amount) {
-		boolean succes;
+	public void addPointToPhysicalStat(Integer playerId,
+			PhysicalStatDTO physicalStat, Integer amount)
+			throws ValidationException {
+		PlayerDTO playerDTO = this.getPlayerById(playerId);
+
 		if (playerDTO.getPhysicalPointsToAsign() <= amount) {
 			playerDTO.setPhysicalPointsToAsign(playerDTO
 					.getPhysicalPointsToAsign() - amount);
@@ -210,17 +255,27 @@ public class PlayerServiceImpl implements PlayerService {
 			}
 			// si sumo es que fue exitoso
 			this.playerDao.update(this.mapper.map(playerDTO, Player.class));
-			succes = sumo;
+
+			if (!sumo) {
+				Map<String, String> errorMap = new HashMap<String, String>();
+				errorMap.put("player",
+						"service.validation.player.physical.stat.not.found");
+				throw new ValidationException(errorMap);
+			}
 
 		} else {
-			succes = false;
+			Map<String, String> errorMap = new HashMap<String, String>();
+			errorMap.put("player",
+					"service.validation.player.physical.stat.not.enough.points");
+			throw new ValidationException(errorMap);
 		}
-		return succes;
 	}
 
-	public boolean addPointToSocialStat(PlayerDTO playerDTO,
-			PhysicalStatDTO socialStat, Integer amount) {
-		boolean succes;
+	public void addPointToSocialStat(Integer playerId,
+			PhysicalStatDTO socialStat, Integer amount)
+			throws ValidationException {
+		PlayerDTO playerDTO = this.getPlayerById(playerId);
+
 		if (playerDTO.getSocialPointsToAsign() <= amount) {
 			playerDTO.setSocialPointsToAsign(playerDTO.getSocialPointsToAsign()
 					- amount);
@@ -238,12 +293,19 @@ public class PlayerServiceImpl implements PlayerService {
 			}
 			// si sumo es que fue exitoso
 			this.playerDao.update(this.mapper.map(playerDTO, Player.class));
-			succes = sumo;
+			if (!sumo) {
+				Map<String, String> errorMap = new HashMap<String, String>();
+				errorMap.put("player",
+						"service.validation.player.social.stat.not.found");
+				throw new ValidationException(errorMap);
+			}
 
 		} else {
-			succes = false;
+			Map<String, String> errorMap = new HashMap<String, String>();
+			errorMap.put("player",
+					"service.validation.player.social.stat.not.enough.points");
+			throw new ValidationException(errorMap);
 		}
-		return succes;
 
 	}
 
@@ -262,22 +324,40 @@ public class PlayerServiceImpl implements PlayerService {
 				.log(LOGARITHM_BASE));
 	}
 
-	private boolean verifySocialStatAmount(
-			Collection<SocialStatAmount> socialStatAmounts) {
+	private void verifySocialStatAmount(
+			Collection<SocialStatAmount> socialStatAmounts,
+			Map<String, String> errors) {
 		Integer acum = 0;
 		for (SocialStatAmount socialStatAmount : socialStatAmounts) {
 			acum = acum + socialStatAmount.getAmount();
 		}
-		return acum == SOCIAL_STATS_AMOUNT;
+		if (acum != SOCIAL_STATS_AMOUNT) {
+			errors.put("social",
+					"service.validation.player.diferent.social.stats");
+		}
+
 	}
 
-	private boolean verifyPhysicalStatAmount(
-			Collection<PhysicalStatAmount> physicalStatAmounts) {
+	private void verifyPhysicalStatAmount(
+			Collection<PhysicalStatAmount> physicalStatAmounts,
+			Map<String, String> errors) {
 		Integer acum = 0;
 		for (PhysicalStatAmount physicalStatAmount : physicalStatAmounts) {
 			acum = acum + physicalStatAmount.getAmount();
 		}
-		return acum == PHYSICAL_STATS_AMOUNT;
+		if (acum != PHYSICAL_STATS_AMOUNT) {
+			errors.put("social",
+					"service.validation.player.diferent.physical.stats");
+		}
 	}
 
+	@Required
+	public void setPhysicalItemDao(PhysicalItemDao physicalItemDao) {
+		this.physicalItemDao = physicalItemDao;
+	}
+
+	@Required
+	public void setSocialItemDao(SocialItemDao socialItemDao) {
+		this.socialItemDao = socialItemDao;
+	}
 }

@@ -18,18 +18,7 @@ http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 		<property name="sessionFactory" ref="sessionFactory"></property>
 	</bean>
 	
-	<bean id="physicalStatDao" class="com.cabesoft.domain.dao.impl.PhysicalStatDaoImpl">
-		<property name="sessionFactory" ref="sessionFactory"></property>
-	</bean>
-	
-	<bean id="socialStatDao" class="com.cabesoft.domain.dao.impl.SocialStatDaoImpl">
-		<property name="sessionFactory" ref="sessionFactory"></property>
-	</bean>
-	
-	<bean id="teamStatDao" class="com.cabesoft.domain.dao.impl.TeamStatDaoImpl">
-		<property name="sessionFactory" ref="sessionFactory"></property>
-	</bean>
-	
+
 	<bean id="playerDao" class="com.cabesoft.domain.dao.impl.PlayerDaoImpl">
 		<property name="sessionFactory" ref="sessionFactory"></property>
 	</bean>

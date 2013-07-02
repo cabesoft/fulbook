@@ -2,11 +2,15 @@ package com.cabesoft.domain.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.cabesoft.domain.enums.PhysicalStat;
 
 @Entity
 @Table(name = "physical_stat_amount")
@@ -25,8 +29,7 @@ public class PhysicalStatAmount {
 
 	public PhysicalStatAmount() {
 	}
-
-	@ManyToOne
+	 @Enumerated(EnumType.STRING)
 	public PhysicalStat getStat() {
 		return stat;
 	}

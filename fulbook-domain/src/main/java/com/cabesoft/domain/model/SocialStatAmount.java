@@ -2,11 +2,15 @@ package com.cabesoft.domain.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.cabesoft.domain.enums.SocialStat;
 
 @Entity
 @Table(name = "social_stat_amount")
@@ -27,7 +31,7 @@ public class SocialStatAmount {
 	public SocialStatAmount() {
 	}
 
-	@ManyToOne
+	@Enumerated(EnumType.STRING)
 	public SocialStat getStat() {
 		return stat;
 	}

@@ -3,8 +3,6 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
-	<!-- Database Configuration -->
-	<import resource="classpath:com/cabesoft/domain/hibernate-context.xml" />
 
 	<!-- Beans Declaration -->
 	<import resource="classpath:com/cabesoft/domain/dao/dao-context.xml" />
@@ -19,5 +17,7 @@ http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 	<bean id="playerService" class="com.cabesoft.service.impl.PlayerServiceImpl">
 		<property name="mapper" ref="dozerMapper"></property>
 		<property name="playerDao" ref="playerDao"></property>
+		<property name="physicalItemDao" ref="physicalItemDao"></property>
+		<property name="socialItemDao" ref="socialItemDao"></property>	
 	</bean>
 </beans>

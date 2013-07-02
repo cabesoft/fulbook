@@ -4,10 +4,9 @@ import java.util.Set;
 
 import com.cabesoft.domain.model.PhysicalStatAmount;
 import com.cabesoft.domain.model.SocialStatAmount;
-import com.cabesoft.model.dto.PhysicalItemDTO;
 import com.cabesoft.model.dto.PhysicalStatDTO;
 import com.cabesoft.model.dto.PlayerDTO;
-import com.cabesoft.model.dto.SocialItemDTO;
+import com.cabesoft.service.exception.ValidationException;
 
 public interface PlayerService {
 
@@ -15,27 +14,32 @@ public interface PlayerService {
 
 	PlayerDTO getPlayerByName(String name);
 
-	PlayerDTO createPlayer(String name, String face,
+	void createPlayer(String name, String face,
 			Set<PhysicalStatAmount> physicalStatAmounts,
-			Set<SocialStatAmount> socialStatAmount);
+			Set<SocialStatAmount> socialStatAmount) throws ValidationException;
 
 	boolean checkNameAvailable(String name);
 
-	void addExpirience(PlayerDTO player, Integer amount);
+	void addExpirience(Integer playerId, Integer amount)
+			throws ValidationException;
 
-	boolean equipPhysicalItem(PlayerDTO player, PhysicalItemDTO physicalItem);
+	void equipPhysicalItem(Integer playerId, Integer physicalItemId)
+			throws ValidationException;
 
-	boolean equipSocialItem(PlayerDTO player, SocialItemDTO socialItem);
+	void equipSocialItem(Integer playerId, Integer socialItemId)
+			throws ValidationException;
 
-	boolean unEquipPhysicalItem(PlayerDTO player, PhysicalItemDTO physicalItem);
+	void unEquipPhysicalItem(Integer playerId, Integer physicalItemId)
+			throws ValidationException;
 
-	boolean unEquipSocialItem(PlayerDTO player, SocialItemDTO socialItem);
+	void unEquipSocialItem(Integer playerId, Integer socialItemId)
+			throws ValidationException;
 
-	boolean addPointToPhysicalStat(PlayerDTO playerDTO,
-			PhysicalStatDTO PhysicalStat, Integer amount);
+	void addPointToPhysicalStat(Integer playerId, PhysicalStatDTO PhysicalStat,
+			Integer amount) throws ValidationException;
 
-	boolean addPointToSocialStat(PlayerDTO playerDTO,
-			PhysicalStatDTO PhysicalStat, Integer amount);
+	void addPointToSocialStat(Integer playerId, PhysicalStatDTO PhysicalStat,
+			Integer amount) throws ValidationException;
 
-	boolean roomOnInventory(PlayerDTO playerDTO);
+	boolean roomOnInventory(Integer playerId);
 }
